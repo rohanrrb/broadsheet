@@ -1,5 +1,5 @@
 import type { TiptapDoc } from "@/core/db";
-import { topLevelNodes, type TiptapNode } from "./tiptap";
+import { textblockNumbers, topLevelNodes, type TiptapNode } from "./tiptap";
 
 /**
  * A piece's running text as the feed sets it: paragraphs and the subheads
@@ -19,6 +19,10 @@ export type Word = string | Span[];
 export interface Block {
   /** A subhead from inside the piece, rather than a paragraph. */
   heading?: true;
+  /** Which of the piece's paragraphs and headings this is: see `textblockNumbers`. */
+  at: number;
+  /** How many of its words came before `words`, when its opening is set elsewhere. */
+  skipped?: number;
   words: Word[];
 }
 
@@ -37,18 +41,20 @@ export function blockText(block: Block): string {
  * which would only sit under the headline, or nothing below it.
  */
 export function proseBlocks(doc: TiptapDoc): Block[] {
-  const blocks = blocksIn(topLevelNodes(doc), true).filter((block) => block.words.length > 0);
+  const numbers = textblockNumbers(doc);
+  const blocks = blocksIn(topLevelNodes(doc), true, numbers).filter((block) => block.words.length > 0);
   const first = blocks.findIndex((block) => !block.heading);
   const last = blocks.findLastIndex((block) => !block.heading);
   return first < 0 ? [] : blocks.slice(first, last + 1);
 }
 
-function blocksIn(nodes: TiptapNode[], topLevel: boolean): Block[] {
+function blocksIn(nodes: TiptapNode[], topLevel: boolean, numbers: Map<TiptapNode, number>): Block[] {
   return nodes.flatMap((node): Block[] => {
-    if (node.type === "paragraph") return [{ words: wordsOf(node) }];
-    if (node.type === "heading") return topLevel ? [{ heading: true, words: wordsOf(node).map(wordText) }] : [];
+    const at = numbers.get(node) ?? 0;
+    if (node.type === "paragraph") return [{ at, words: wordsOf(node) }];
+    if (node.type === "heading") return topLevel ? [{ heading: true, at, words: wordsOf(node).map(wordText) }] : [];
     if (node.type === "blockquote") return [];
-    return blocksIn(node.content ?? [], false);
+    return blocksIn(node.content ?? [], false, numbers);
   });
 }
 

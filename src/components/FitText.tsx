@@ -1,8 +1,8 @@
 "use client";
 
 import { useLayoutEffect, useRef } from "react";
-import { BOLD, ITALIC, wordText, type Block, type Word } from "@/feed/blocks";
-import { continuedAt } from "@/feed/fragment";
+import { BOLD, ITALIC, type Block, type Word } from "@/feed/blocks";
+import { hrefAt, type Place } from "@/feed/place";
 
 interface FitTextProps {
   blocks: readonly Block[];
@@ -75,24 +75,21 @@ function bodyHtml(blocks: readonly Block[], count: number, jump: { label: string
   const parts: string[] = [];
   let left = count;
   let endsOnSubhead = false;
-  /** The text shown, block by block, for the jump line to pick the story up where it stops. */
-  const shownText: string[][] = [];
+  /** Where the text stops: the last paragraph shown, and how far into it. */
+  let stop: Place | null = null;
   for (const block of blocks) {
     if (left <= 0) break;
     const shown = block.words.slice(0, left);
     const words = shown.map(wordHtml).join(" ");
     parts.push(block.heading ? `<p data-subhead>${words}</p>` : `<p>${words}</p>`);
     endsOnSubhead = block.heading === true;
-    shownText.push(shown.map(wordText));
+    if (!block.heading) stop = { block: block.at, words: (block.skipped ?? 0) + shown.length };
     left -= block.words.length;
   }
   // A subhead is never the last thing in a box: it belongs to the text under it.
-  if (endsOnSubhead) {
-    parts.pop();
-    shownText.pop();
-  }
+  if (endsOnSubhead) parts.pop();
   if (jump) {
-    const href = continuedAt(jump.href, shownText);
+    const href = stop ? hrefAt(jump.href, stop) : jump.href;
     parts.push(`<p data-jump><a href="${escapeHtml(href)}">${escapeHtml(jump.label)}</a></p>`);
   }
   return parts.join("");

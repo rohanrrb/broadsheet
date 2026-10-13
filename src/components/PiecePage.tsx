@@ -6,6 +6,7 @@ import { getInstance } from "@/server/instance";
 import { todayConfig } from "@/widgets/config";
 import { countWords } from "@/feed/tiptap";
 import { Byline } from "./Byline";
+import { ContinuedFrom } from "./ContinuedFrom";
 import { EditedNote } from "./EditedNote";
 import { NewWriterNote } from "./NewWriterNote";
 import { PieceArrows } from "./PieceArrows";
@@ -50,6 +51,7 @@ export function PiecePage({ writing }: { writing: Writing }) {
           edited={edits.length > 0 && <Edited edits={edits} />}
         />
         <RichText doc={writing.body} headline={writing.title} className={`${styles.body} ${prose.prose}`} />
+        <ContinuedFrom />
       </article>
       <PieceArrows previous={previous && arrowTo(previous)} next={next && arrowTo(next)} />
     </main>

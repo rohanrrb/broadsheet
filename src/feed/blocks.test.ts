@@ -24,13 +24,16 @@ describe("proseBlocks", () => {
     const blocks = proseBlocks(
       doc(heading(text("Above")), paragraph(text("One.")), heading(text("Mid", "italic"), text("dle")), paragraph(text("Two.")), heading(text("Below"))),
     );
-    expect(blocks).toEqual([{ words: ["One."] }, { heading: true, words: ["Middle"] }, { words: ["Two."] }]);
+    expect(blocks).toEqual([{ at: 1, words: ["One."] }, { heading: true, at: 2, words: ["Middle"] }, { at: 3, words: ["Two."] }]);
   });
 
   it("reads list items, and leaves out pull quotes and empty paragraphs", () => {
     const list = { type: "bulletList", content: [{ type: "listItem", content: [paragraph(text("Item"))] }] };
     const quote = { type: "blockquote", content: [paragraph(text("Quoted"))] };
-    expect(proseBlocks(doc(paragraph(text("One")), paragraph(), quote, list)).map(blockText)).toEqual(["One", "Item"]);
+    const blocks = proseBlocks(doc(paragraph(text("One")), paragraph(), quote, list));
+    expect(blocks.map(blockText)).toEqual(["One", "Item"]);
+    // Numbered among every paragraph of the piece, the empty one and the quoted one included.
+    expect(blocks.map((block) => block.at)).toEqual([0, 3]);
   });
 });
 
@@ -46,7 +49,7 @@ describe("cutToBudget", () => {
   });
 
   it("stops inside a block and says the story goes on", () => {
-    const cut = cutToBudget([{ words: Array(200).fill("word") }, { words: ["after"] }], 100);
+    const cut = cutToBudget([{ at: 0, words: Array(200).fill("word") }, { at: 1, words: ["after"] }], 100);
     expect(cut.truncated).toBe(true);
     expect(cut.budgetWords).toBe(20);
     expect(cut.blocks).toHaveLength(1);

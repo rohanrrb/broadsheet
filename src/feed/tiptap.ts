@@ -16,6 +16,21 @@ export function topLevelNodes(doc: TiptapDoc): TiptapNode[] {
 /** Nodes whose children are inline text, so their text joins without spaces. */
 const TEXTBLOCKS = new Set(["paragraph", "heading"]);
 
+/**
+ * A number for every paragraph and heading in a document, in reading order
+ * and wherever it sits (in a list, in a quote). The feed and the piece's page
+ * both count this way, so a place the one names is the place the other finds.
+ */
+export function textblockNumbers(doc: TiptapDoc): Map<TiptapNode, number> {
+  const numbers = new Map<TiptapNode, number>();
+  const visit = (node: TiptapNode) => {
+    if (TEXTBLOCKS.has(node.type)) numbers.set(node, numbers.size);
+    else node.content?.forEach(visit);
+  };
+  topLevelNodes(doc).forEach(visit);
+  return numbers;
+}
+
 /** All text inside a node. Separate blocks (list items, quote paragraphs) are joined by a space. */
 export function nodeText(node: TiptapNode): string {
   if (node.type === "text") return node.text ?? "";

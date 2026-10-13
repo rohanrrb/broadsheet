@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type { TiptapDoc } from "@/core/db";
-import { topLevelNodes, type TiptapNode } from "@/feed/tiptap";
+import { textblockNumbers, topLevelNodes, type TiptapNode } from "@/feed/tiptap";
 import { ArticleImage } from "./ArticleImage";
 
 interface RichTextProps {
@@ -10,22 +10,33 @@ interface RichTextProps {
   className?: string;
 }
 
-/** Renders a stored Tiptap document as plain semantic HTML. Unknown nodes are skipped. */
+/** What every node is rendered with: the headline, and each paragraph's and heading's number in the piece. */
+interface Setting {
+  headline?: string;
+  numbers: Map<TiptapNode, number>;
+}
+
+/**
+ * Renders a stored Tiptap document as plain semantic HTML. Unknown nodes are
+ * skipped. Each paragraph and heading carries its number in the piece as
+ * `data-block`, by which a place in the text can be found again.
+ */
 export function RichText({ doc, headline, className }: RichTextProps) {
-  return <div className={className}>{renderNodes(topLevelNodes(doc), headline)}</div>;
+  return <div className={className}>{renderNodes(topLevelNodes(doc), { headline, numbers: textblockNumbers(doc) })}</div>;
 }
 
-function renderNodes(nodes: TiptapNode[] = [], headline?: string): ReactNode[] {
-  return nodes.map((node, i) => renderNode(node, i, headline));
+function renderNodes(nodes: TiptapNode[] = [], setting: Setting): ReactNode[] {
+  return nodes.map((node, i) => renderNode(node, i, setting));
 }
 
-function renderNode(node: TiptapNode, key: number, headline?: string): ReactNode {
-  const children = renderNodes(node.content, headline);
+function renderNode(node: TiptapNode, key: number, setting: Setting): ReactNode {
+  const children = renderNodes(node.content, setting);
+  const block = setting.numbers.get(node);
   switch (node.type) {
     case "paragraph":
-      return <p key={key}>{children}</p>;
+      return <p key={key} data-block={block}>{children}</p>;
     case "heading":
-      return node.attrs?.level === 3 ? <h3 key={key}>{children}</h3> : <h2 key={key}>{children}</h2>;
+      return node.attrs?.level === 3 ? <h3 key={key} data-block={block}>{children}</h3> : <h2 key={key} data-block={block}>{children}</h2>;
     case "blockquote":
       return <blockquote key={key}>{children}</blockquote>;
     case "bulletList":
@@ -39,7 +50,7 @@ function renderNode(node: TiptapNode, key: number, headline?: string): ReactNode
     case "hardBreak":
       return <br key={key} />;
     case "image":
-      return <Photo key={key} node={node} headline={headline} />;
+      return <Photo key={key} node={node} headline={setting.headline} />;
     case "text":
       return <MarkedText key={key} node={node} />;
     default:

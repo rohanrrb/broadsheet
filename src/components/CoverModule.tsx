@@ -78,5 +78,5 @@ function withoutLead(blocks: Block[], dek: string): Block[] {
   const dekWords = dek.split(/\s+/).filter(Boolean).length;
   if (!first || first.heading || first.words.slice(0, dekWords).map(wordText).join(" ") !== dek) return blocks;
   const remainder = first.words.slice(dekWords);
-  return remainder.length > 0 ? [{ words: remainder }, ...rest] : rest;
+  return remainder.length > 0 ? [{ ...first, words: remainder, skipped: dekWords }, ...rest] : rest;
 }
