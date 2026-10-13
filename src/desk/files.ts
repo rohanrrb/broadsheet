@@ -1,5 +1,5 @@
 import { getInstanceSettings, type InstanceDb } from "@/core/db";
-import { countEditsByWriting, listAllWritings, type Writing } from "@/core/writings";
+import { countEditsByWriting, listAllWritings, pieceHref, type Writing } from "@/core/writings";
 import { readFeedPlan, type FeedPlan } from "@/feed/feed";
 import { sectionOf } from "@/feed/sections";
 import { countWords } from "@/feed/tiptap";
@@ -7,6 +7,8 @@ import { countWords } from "@/feed/tiptap";
 /** One writing as the editor's desk lists it: a file in the instance. */
 export interface DeskFile {
   id: number;
+  /** Where the piece is read. */
+  href: string;
   /** The headline as printed, without any section prefix. */
   headline: string;
   author: string;
@@ -58,6 +60,7 @@ function describe(writing: Writing, plan: FeedPlan, timeZone: string): Omit<Desk
   const section = sectionOf(writing.title);
   return {
     id: writing.id,
+    href: pieceHref(writing),
     headline: section.headline,
     author: writing.author,
     section: section.kicker,

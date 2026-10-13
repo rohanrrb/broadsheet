@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getInstanceSettings } from "@/core/db";
+import { pieceHref } from "@/core/writings";
 import { searchWritings } from "@/feed/search";
 import { sectionOf } from "@/feed/sections";
 import { getInstance } from "@/server/instance";
@@ -32,7 +33,7 @@ export default async function SearchPage(props: PageProps<"/search">) {
         <ol className={styles.results}>
           {results.map((piece) => (
             <li key={piece.id}>
-              <Link href={`/w/${piece.id}`}>{sectionOf(piece.title).headline}</Link>
+              <Link href={pieceHref(piece)}>{sectionOf(piece.title).headline}</Link>
               <span className={styles.meta}>
                 {piece.writerId ? <Link href={writerHref(piece.author)}>{piece.author}</Link> : piece.author} ·{" "}
                 {piece.createdAt.toLocaleDateString("en-US", { timeZone, month: "short", day: "numeric", year: "numeric" })}

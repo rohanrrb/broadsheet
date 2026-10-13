@@ -64,7 +64,7 @@ async function readText(request: Request, maxBytes: number): Promise<string | un
 
 export function saveResponse(result: SaveResult, successStatus: 200 | 201): Response {
   if (!result.ok) return Response.json({ error: result.error }, { status: result.status });
-  return Response.json({ id: result.id, url: `/w/${result.id}` }, { status: successStatus });
+  return Response.json({ id: result.id, url: result.url }, { status: successStatus });
 }
 
 /**

@@ -42,7 +42,7 @@ export function DeskToolbar({ listed, selected, onMove, onSpike, onCover }: Desk
       </div>
       <span className={controls.divider} />
       <div className={controls.group}>
-        <FileLink href={selected && !selected.spiked ? `/w/${selected.id}` : null}>Read</FileLink>
+        <FileLink href={selected && !selected.spiked ? selected.href : null}>Read</FileLink>
         {/* A writer's piece is theirs alone to edit; only one with no writer is the editor's. */}
         {selected?.unsigned && <FileLink href={`/w/${selected.id}/edit`}>Edit</FileLink>}
       </div>

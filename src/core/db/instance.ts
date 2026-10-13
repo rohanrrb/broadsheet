@@ -2,8 +2,9 @@ import path from "node:path";
 import Database from "better-sqlite3";
 import { drizzle, type BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { migrate } from "drizzle-orm/better-sqlite3/migrator";
-import { eq } from "drizzle-orm";
+import { and, eq, isNotNull, isNull } from "drizzle-orm";
 import { handleOf } from "../writers/handle";
+import { freeSlug } from "../writings/slug";
 import * as schema from "./schema";
 
 /** The instance database; `$client` is the SQLite connection itself, for whole-file work like backups. */
@@ -29,6 +30,7 @@ export function openInstance(filePath: string): InstanceDb {
   const db = drizzle(sqlite, { schema });
   migrate(db, { migrationsFolder: MIGRATIONS_FOLDER });
   ensureInstanceRow(db);
+  fillSlugs(db);
   refoldHandles(db);
   return db;
 }
@@ -50,6 +52,27 @@ function refoldHandles(db: InstanceDb): void {
     db.update(schema.writers).set({ handle }).where(eq(schema.writers.id, writer.id)).run();
     taken.delete(writer.handle);
     taken.add(handle);
+  }
+}
+
+/**
+ * Gives a slug to every writer's piece published before pieces had them,
+ * oldest first, so the earlier of two with one headline takes the plain slug.
+ * SQL cannot fold a headline, so it is done here when a paper is opened.
+ */
+function fillSlugs(db: InstanceDb): void {
+  const { writings } = schema;
+  const bare = db.select().from(writings).where(and(isNotNull(writings.writerId), isNull(writings.slug))).orderBy(writings.id).all();
+  if (bare.length === 0) return;
+  const taken = new Map<number, Set<string | null>>();
+  for (const row of db.select({ writerId: writings.writerId, slug: writings.slug }).from(writings).where(isNotNull(writings.slug)).all()) {
+    if (row.writerId !== null) taken.set(row.writerId, (taken.get(row.writerId) ?? new Set()).add(row.slug));
+  }
+  for (const writing of bare) {
+    const slugs = taken.get(writing.writerId!) ?? new Set();
+    const slug = freeSlug(writing.title, slugs);
+    db.update(writings).set({ slug }).where(eq(writings.id, writing.id)).run();
+    taken.set(writing.writerId!, slugs.add(slug));
   }
 }
 

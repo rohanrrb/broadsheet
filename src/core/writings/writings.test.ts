@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { sql } from "drizzle-orm";
 import { openInstance, type InstanceDb } from "../db/instance";
 import type { TiptapDoc } from "../db/schema";
+import { createWriter } from "../writers";
 import {
   InvalidCursorError,
   WritingNotFoundError,
@@ -11,6 +12,7 @@ import {
   getEditHistory,
   getNeighbours,
   getWriting,
+  getWritingBySlug,
   listAllWritings,
   listWritings,
   moveWriting,
@@ -41,6 +43,25 @@ describe("createWriting", () => {
     const smuggled = { ...draft("Old news"), createdAt: new Date(0) } as never;
     const created = createWriting(db, smuggled);
     expect(created.createdAt.getTime()).toBeGreaterThanOrEqual(before);
+  });
+});
+
+describe("a piece's slug", () => {
+  it("is given to a writer's piece, numbered when they reuse a headline, and kept through an edit", () => {
+    const writerId = createWriter(db, { name: "Ana", keyHash: "h" }).id;
+    const first = createWriting(db, { ...draft("Bus Lanes"), writerId });
+    const second = createWriting(db, { ...draft("Bus Lanes"), writerId });
+    expect([first.slug, second.slug]).toEqual(["bus-lanes", "bus-lanes-2"]);
+    expect(editWriting(db, first.id, { title: "Tram Lines" }).slug).toBe("bus-lanes");
+    expect(getWritingBySlug(db, writerId, "bus-lanes")?.id).toBe(first.id);
+  });
+
+  it("is each writer's own, and not given to a piece with no writer", () => {
+    const ana = createWriter(db, { name: "Ana", keyHash: "h" }).id;
+    const ben = createWriter(db, { name: "Ben", keyHash: "h" }).id;
+    expect(createWriting(db, { ...draft("Bus Lanes"), writerId: ana }).slug).toBe("bus-lanes");
+    expect(createWriting(db, { ...draft("Bus Lanes"), writerId: ben }).slug).toBe("bus-lanes");
+    expect(createWriting(db, draft("Bus Lanes")).slug).toBeNull();
   });
 });
 

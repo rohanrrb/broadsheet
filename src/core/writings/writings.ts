@@ -2,6 +2,7 @@ import { and, asc, count, desc, eq, gt, isNull, lt } from "drizzle-orm";
 import type { InstanceDb, Queryable } from "../db/instance";
 import { writingEdits, writings, type TiptapDoc } from "../db/schema";
 import { InvalidCursorError, WritingNotFoundError } from "./errors";
+import { freeSlug } from "./slug";
 
 /** How many writings `listWritings` returns when no limit is asked for. */
 const DEFAULT_PAGE_SIZE = 20;
@@ -22,6 +23,7 @@ export function createWriting(db: InstanceDb, input: NewWriting): Writing {
       .insert(writings)
       .values({
         title: input.title,
+        slug: input.writerId === undefined ? null : freeSlug(input.title, slugsOf(tx, input.writerId)),
         body: input.body,
         author: input.author,
         writerId: input.writerId,
@@ -35,6 +37,17 @@ export function createWriting(db: InstanceDb, input: NewWriting): Writing {
 
 export function getWriting(db: Queryable, id: number): Writing | undefined {
   return db.select().from(writings).where(eq(writings.id, id)).get();
+}
+
+/** A writer's piece, by the slug in its address. */
+export function getWritingBySlug(db: Queryable, writerId: number, slug: string): Writing | undefined {
+  return db.select().from(writings).where(and(eq(writings.writerId, writerId), eq(writings.slug, slug))).get();
+}
+
+/** Every slug a writer's pieces hold, spiked ones included: an address is never handed on. */
+function slugsOf(db: Queryable, writerId: number): Set<string | null> {
+  const rows = db.select({ slug: writings.slug }).from(writings).where(eq(writings.writerId, writerId)).all();
+  return new Set(rows.map((row) => row.slug));
 }
 
 /**

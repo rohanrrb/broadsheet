@@ -6,6 +6,7 @@ export {
   getEditHistory,
   getNeighbours,
   getWriting,
+  getWritingBySlug,
   listAllWritings,
   listWritings,
   setSpiked,
@@ -18,3 +19,4 @@ export {
 } from "./writings";
 export { moveWriting, type FeedPlacement } from "./ordering";
 export * from "./errors";
+export { pieceHref, slugOf } from "./slug";

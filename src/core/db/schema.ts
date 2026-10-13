@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { blob, check, index, integer, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { blob, check, index, integer, real, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 
 /** Minimal shape of a Tiptap (ProseMirror) JSON document. */
 export type TiptapDoc = {
@@ -68,27 +68,37 @@ export const writers = sqliteTable("writers", {
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
 });
 
-export const writings = sqliteTable("writings", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
-  title: text("title").notNull(),
-  body: text("body", { mode: "json" }).$type<TiptapDoc>().notNull(),
-  /** The byline as printed, fixed at publication. */
-  author: text("author").notNull(),
-  /** Who wrote it. Null for pieces published before pen names existed. */
-  writerId: integer("writer_id").references(() => writers.id),
-  /** Set by broadsheet on insert. Immutable (also enforced by a DB trigger). */
-  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
-  /**
-   * Feed order, highest first. Starts near createdAt so the default feed is
-   * newest first; owners reorder by changing this, never the dates.
-   */
-  position: real("position").notNull().unique(),
-  /**
-   * When the instance's editor pulled the piece from the paper; null while it
-   * is in print. A spiked writing keeps its date, edits and feed position.
-   */
-  spikedAt: integer("spiked_at", { mode: "timestamp_ms" }),
-});
+export const writings = sqliteTable(
+  "writings",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    title: text("title").notNull(),
+    /**
+     * The headline as it reads in the piece's address, under its writer's page.
+     * Given at publication and kept when the headline changes, so the address
+     * holds. Null for a piece with no writer.
+     */
+    slug: text("slug"),
+    body: text("body", { mode: "json" }).$type<TiptapDoc>().notNull(),
+    /** The byline as printed, fixed at publication. */
+    author: text("author").notNull(),
+    /** Who wrote it. Null for pieces published before pen names existed. */
+    writerId: integer("writer_id").references(() => writers.id),
+    /** Set by broadsheet on insert. Immutable (also enforced by a DB trigger). */
+    createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
+    /**
+     * Feed order, highest first. Starts near createdAt so the default feed is
+     * newest first; owners reorder by changing this, never the dates.
+     */
+    position: real("position").notNull().unique(),
+    /**
+     * When the instance's editor pulled the piece from the paper; null while it
+     * is in print. A spiked writing keeps its date, edits and feed position.
+     */
+    spikedAt: integer("spiked_at", { mode: "timestamp_ms" }),
+  },
+  (t) => [uniqueIndex("writings_writer_slug_idx").on(t.writerId, t.slug)],
+);
 
 /** Snapshot of a writing taken just before each edit. */
 export const writingEdits = sqliteTable(

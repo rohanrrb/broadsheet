@@ -1,5 +1,5 @@
 import type { ArticleSummary } from "@/core/layout";
-import type { Writing } from "@/core/writings";
+import { pieceHref, type Writing } from "@/core/writings";
 import { sectionOf } from "./sections";
 import { blockText, proseBlocks, type Block } from "./blocks";
 import { countWords, firstImage } from "./tiptap";
@@ -10,6 +10,8 @@ export interface FeedArticle extends ArticleSummary {
   author: string;
   /** Whether the author has a writer's page; pieces from before pen names do not. */
   authorHasPage: boolean;
+  /** Where the piece is read. */
+  href: string;
   kicker: string;
   imageCaption?: string;
   imageCredit?: string;
@@ -35,6 +37,7 @@ export function toFeedEntry(writing: Writing): FeedEntry {
       title: section.headline,
       author: writing.author,
       authorHasPage: writing.writerId !== null,
+      href: pieceHref(writing),
       kicker: section.kicker,
       voice: section.voice,
       excerpt: excerptOf(paragraphs),

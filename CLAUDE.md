@@ -91,7 +91,7 @@ npx tsc --noEmit
 
 - **Tests** sit beside the code as `*.test.ts` and run in Node, without a browser. Anything touching the database opens a throwaway one with `openInstance(":memory:")`. Keep logic in plain modules (`src/core`, `src/feed`, `src/editor`, `src/desk`, `src/server`) where it can be tested, and keep components thin.
 - **A bug fix comes with a test** that fails without it.
-- **Anything a reader can see, look at.** Tests cannot judge a newspaper page. Run the dev server and view the front page, later pages (scroll), a piece (`/w/<id>`), the editor (`/write`) and the desk, on a wide screen and a narrow one. Screenshots can go in `.screenshots/` (gitignored); attach them to the pull request.
+- **Anything a reader can see, look at.** Tests cannot judge a newspaper page. Run the dev server and view the front page, later pages (scroll), a piece (`/by/<moniker>/<slug>`), the editor (`/write`) and the desk, on a wide screen and a narrow one. Screenshots can go in `.screenshots/` (gitignored); attach them to the pull request.
 - **Changes to layout** should be checked against the full seed, and against a paper with very few writings, where recipes have little to work with.
 
 ## Sending a change

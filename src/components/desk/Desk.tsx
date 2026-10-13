@@ -78,7 +78,7 @@ export function Desk({ instanceName, files: serverFiles }: DeskProps) {
           onSort={(key) => setSort(nextSort(sort, key))}
           selectedId={selectedId}
           onSelect={setSelectedId}
-          onOpen={(id) => router.push(`/w/${id}`)}
+          onOpen={(id) => router.push(listed.find((file) => file.id === id)?.href ?? `/w/${id}`)}
           onMove={canMove ? moveSelected : undefined}
         />
         <p className={styles.status}>{selected ? describeFile(selected) : describeFolder(listed, inFeedOrder)}</p>

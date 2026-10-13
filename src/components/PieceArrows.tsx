@@ -2,8 +2,8 @@ import Link from "next/link";
 import styles from "./PieceArrows.module.css";
 
 interface Piece {
-  id: number;
   title: string;
+  href: string;
 }
 
 interface PieceArrowsProps {
@@ -30,7 +30,7 @@ function Arrow({ piece, glyph, label, side }: { piece?: Piece; glyph: string; la
   if (!piece) return null;
   return (
     <Link
-      href={`/w/${piece.id}`}
+      href={piece.href}
       className={`${styles.arrow} ${side}`}
       aria-label={`${label}: ${piece.title}`}
       title={piece.title}

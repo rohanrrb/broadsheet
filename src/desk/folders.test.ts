@@ -5,6 +5,7 @@ import { FEED_ORDER, PAPER, filesIn, folderPath, folderTree, moveFile, nextSort,
 function file(id: number, fields: Partial<DeskFile> = {}): DeskFile {
   return {
     id,
+    href: `/w/${id}`,
     headline: `Story ${id}`,
     author: "Ana",
     section: "Metro",

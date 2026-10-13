@@ -4,6 +4,8 @@ import {
   createWriting,
   editWriting,
   getWriting,
+  pieceHref,
+  type Writing,
   type WritingChanges,
 } from "@/core/writings";
 import { TooManyAttemptsError, UNKNOWN_CLIENT } from "./attempts";
@@ -21,7 +23,7 @@ import { InvalidDocumentError, isBlankDoc, normalizeDoc } from "@/editor/schema"
 export const MAX_TITLE_LENGTH = 200;
 
 export type SaveResult =
-  | { ok: true; id: number }
+  | { ok: true; id: number; url: string }
   | { ok: false; status: 400 | 401 | 403 | 404 | 429; error: string };
 
 /** `client` is whoever is asking, for counting wrong keys: see `clientOf`. */
@@ -31,7 +33,7 @@ export function publishWriting(db: InstanceDb, json: unknown, client: string = U
     const piece = parseWritingChanges(json);
     const writer = authenticateWriter(db, fields.name, fields.key, client);
     if (!writer) throw new NotTheWriterError("That moniker and credential do not match. Check the credential, or start a new moniker.");
-    return createWriting(db, { ...piece, author: writer.name, writerId: writer.id }).id;
+    return createWriting(db, { ...piece, author: writer.name, writerId: writer.id });
   });
 }
 
@@ -59,7 +61,7 @@ export function saveWritingEdit(
         403,
       );
     }
-    return editWriting(db, id, changes).id;
+    return editWriting(db, id, changes);
   });
 }
 
@@ -98,9 +100,10 @@ class NotTheWriterError extends Error {
   }
 }
 
-function attempt(save: () => number): SaveResult {
+function attempt(save: () => Writing): SaveResult {
   try {
-    return { ok: true, id: save() };
+    const writing = save();
+    return { ok: true, id: writing.id, url: pieceHref(writing) };
   } catch (error) {
     return failure(error);
   }

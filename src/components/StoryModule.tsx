@@ -75,7 +75,7 @@ export function Author({ article, className }: { article: FeedArticle; className
 }
 
 export function articleHref(article: FeedArticle): string {
-  return `/w/${article.id}`;
+  return article.href;
 }
 
 /** Each writing has its own page, W-numbered like a newspaper section. */

@@ -73,7 +73,7 @@ describe("publishWriting", () => {
 describe("saveWritingEdit", () => {
   it("edits headline and body but never the byline", () => {
     const id = publish();
-    expect(saveWritingEdit(db, id, { title: "New", author: "Mallory", body: body("Changed."), key: ana.key })).toEqual({ ok: true, id });
+    expect(saveWritingEdit(db, id, { title: "New", author: "Mallory", body: body("Changed."), key: ana.key })).toMatchObject({ ok: true, id });
     expect(getWriting(db, id)).toMatchObject({ title: "New", author: "Ana", body: body("Changed.") });
   });
 
@@ -98,7 +98,7 @@ describe("saveWritingEdit", () => {
     const old = createWriting(db, { title: "Old", author: "Unsigned", body: body("x") as never });
     const change = { title: "Old, corrected", body: body("x") };
     expect(saveWritingEdit(db, old.id, { ...change, key: ana.key })).toMatchObject({ ok: false, status: 403 });
-    expect(saveWritingEdit(db, old.id, change, { editor: true })).toEqual({ ok: true, id: old.id });
+    expect(saveWritingEdit(db, old.id, change, { editor: true })).toEqual({ ok: true, id: old.id, url: `/w/${old.id}` });
   });
 
   it("reports a missing writing as a 404", () => {
