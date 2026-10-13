@@ -48,6 +48,12 @@ a {
   background: #f1d98a;
 }
 
+/* Where a "Continued on" line picks a piece up: the last words the reader saw on the page they came from. */
+::target-text {
+  background: #f1d98a;
+  color: inherit;
+}
+
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
