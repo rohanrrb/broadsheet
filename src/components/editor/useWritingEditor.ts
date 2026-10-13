@@ -6,6 +6,7 @@ import { Placeholder } from "@tiptap/extensions";
 import type { TiptapDoc } from "@/core/db";
 import { documentExtensions, emptyDoc } from "@/editor/schema";
 import prose from "@/components/Prose.module.css";
+import { MarkdownInput } from "./markdownInput";
 import styles from "./WritingEditor.module.css";
 
 interface WritingEditorOptions {
@@ -22,7 +23,7 @@ export function useWritingEditor({ initialBody, onLinkShortcut }: WritingEditorO
   }, [onLinkShortcut]);
 
   const editor = useEditor({
-    extensions: [...documentExtensions(), Placeholder.configure({ placeholder: "Begin writing…" })],
+    extensions: [...documentExtensions(), MarkdownInput, Placeholder.configure({ placeholder: "Begin writing…" })],
     content: toContent(initialBody ?? emptyDoc()),
     immediatelyRender: false,
     editorProps: {
