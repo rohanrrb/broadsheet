@@ -75,7 +75,8 @@ function applyMark(content: ReactNode, mark: NonNullable<TiptapNode["marks"]>[nu
       return <code>{content}</code>;
     case "link":
       return isSafeHref(mark.attrs?.href) ? (
-        <a href={mark.attrs.href} target="_blank" rel="noopener noreferrer nofollow">
+        // A link to one of the paper's own pages stays in the tab; any other opens a new one.
+        <a href={mark.attrs.href} target={mark.attrs.href.startsWith("/") ? undefined : "_blank"} rel="noopener noreferrer nofollow">
           {content}
         </a>
       ) : (
