@@ -75,21 +75,24 @@ function bodyHtml(blocks: readonly Block[], count: number, jump: { label: string
   const parts: string[] = [];
   let left = count;
   let endsOnSubhead = false;
-  /** The words of the last paragraph shown, where the jump line picks the story up. */
-  let lastShown: readonly Word[] = [];
+  /** The text shown, block by block, for the jump line to pick the story up where it stops. */
+  const shownText: string[][] = [];
   for (const block of blocks) {
     if (left <= 0) break;
     const shown = block.words.slice(0, left);
     const words = shown.map(wordHtml).join(" ");
     parts.push(block.heading ? `<p data-subhead>${words}</p>` : `<p>${words}</p>`);
     endsOnSubhead = block.heading === true;
-    if (!block.heading) lastShown = shown;
+    shownText.push(shown.map(wordText));
     left -= block.words.length;
   }
   // A subhead is never the last thing in a box: it belongs to the text under it.
-  if (endsOnSubhead) parts.pop();
+  if (endsOnSubhead) {
+    parts.pop();
+    shownText.pop();
+  }
   if (jump) {
-    const href = continuedAt(jump.href, lastShown.map(wordText));
+    const href = continuedAt(jump.href, shownText);
     parts.push(`<p data-jump><a href="${escapeHtml(href)}">${escapeHtml(jump.label)}</a></p>`);
   }
   return parts.join("");
