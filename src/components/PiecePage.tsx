@@ -7,6 +7,7 @@ import { todayConfig } from "@/widgets/config";
 import type { Place } from "@/feed/place";
 import { countWords } from "@/feed/tiptap";
 import { Byline } from "./Byline";
+import { ClearPlace } from "./ClearPlace";
 import { EditedNote } from "./EditedNote";
 import { NewWriterNote } from "./NewWriterNote";
 import { PieceArrows } from "./PieceArrows";
@@ -55,6 +56,7 @@ export function PiecePage({ writing, place }: { writing: Writing; place?: Place 
           edited={edits.length > 0 && <Edited edits={edits} />}
         />
         <RichText doc={writing.body} headline={writing.title} place={place} className={`${styles.body} ${prose.prose}`} />
+        {place && <ClearPlace />}
       </article>
       <PieceArrows previous={previous && arrowTo(previous)} next={next && arrowTo(next)} />
     </main>

@@ -54,6 +54,12 @@ mark {
   color: inherit;
   /* The address leads here; the words sit a third of the way down, not under the top edge. */
   scroll-margin-top: 33vh;
+  transition: background-color 0.3s;
+}
+
+/* Put out at the reader's first click: it has shown them where they were. */
+mark[data-seen] {
+  background: transparent;
 }
 
 :focus-visible {
