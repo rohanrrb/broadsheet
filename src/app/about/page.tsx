@@ -19,7 +19,7 @@ export default async function AboutPage() {
   return (
     <PaperNote name={name} title="About" markdown={about}>
       <p>
-        {name} is a <a href={sourceUrl()}>broadsheet</a> instance. You can have your own too!
+        {name} is a <a href={sourceUrl()} target="_blank" rel="noopener noreferrer">broadsheet</a> instance. You can have your own too!
       </p>
     </PaperNote>
   );
