@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 import type { TiptapDoc } from "@/core/db";
+import { CONTINUED, markBefore } from "@/feed/blocks";
+import { PLACE_ID, type Place } from "@/feed/place";
 import { textblockNumbers, topLevelNodes, type TiptapNode } from "@/feed/tiptap";
 import { ArticleImage } from "./ArticleImage";
 
@@ -7,6 +9,8 @@ interface RichTextProps {
   doc: TiptapDoc;
   /** Photo captions that merely repeat the headline are not printed. */
   headline?: string;
+  /** A place to open at: the words before it are marked. */
+  place?: Place | null;
   className?: string;
 }
 
@@ -14,15 +18,15 @@ interface RichTextProps {
 interface Setting {
   headline?: string;
   numbers: Map<TiptapNode, number>;
+  place?: Place | null;
 }
 
 /**
  * Renders a stored Tiptap document as plain semantic HTML. Unknown nodes are
- * skipped. Each paragraph and heading carries its number in the piece as
- * `data-block`, by which a place in the text can be found again.
+ * skipped. With a `place`, the words before it are set in a `<mark>` an address can lead to.
  */
-export function RichText({ doc, headline, className }: RichTextProps) {
-  return <div className={className}>{renderNodes(topLevelNodes(doc), { headline, numbers: textblockNumbers(doc) })}</div>;
+export function RichText({ doc, headline, place, className }: RichTextProps) {
+  return <div className={className}>{renderNodes(topLevelNodes(doc), { headline, place, numbers: textblockNumbers(doc) })}</div>;
 }
 
 function renderNodes(nodes: TiptapNode[] = [], setting: Setting): ReactNode[] {
@@ -30,13 +34,14 @@ function renderNodes(nodes: TiptapNode[] = [], setting: Setting): ReactNode[] {
 }
 
 function renderNode(node: TiptapNode, key: number, setting: Setting): ReactNode {
-  const children = renderNodes(node.content, setting);
   const block = setting.numbers.get(node);
+  const marked = block !== undefined && block === setting.place?.block;
+  const children = renderNodes(marked ? markBefore(node, setting.place!.words) : node.content, setting);
   switch (node.type) {
     case "paragraph":
-      return <p key={key} data-block={block}>{children}</p>;
+      return <p key={key}>{children}</p>;
     case "heading":
-      return node.attrs?.level === 3 ? <h3 key={key} data-block={block}>{children}</h3> : <h2 key={key} data-block={block}>{children}</h2>;
+      return node.attrs?.level === 3 ? <h3 key={key}>{children}</h3> : <h2 key={key}>{children}</h2>;
     case "blockquote":
       return <blockquote key={key}>{children}</blockquote>;
     case "bulletList":
@@ -84,6 +89,8 @@ function applyMark(content: ReactNode, mark: NonNullable<TiptapNode["marks"]>[nu
       return <em>{content}</em>;
     case "code":
       return <code>{content}</code>;
+    case CONTINUED:
+      return <mark id={mark.attrs?.first ? PLACE_ID : undefined}>{content}</mark>;
     case "link":
       return isSafeHref(mark.attrs?.href) ? (
         // A link to one of the paper's own pages stays in the tab; any other opens a new one.

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { TiptapDoc } from "@/core/db";
-import { BOLD, ITALIC, blockText, proseBlocks } from "./blocks";
+import { BOLD, ITALIC, blockText, markBefore, proseBlocks } from "./blocks";
 import { cutToBudget } from "./text";
 
 const text = (value: string, ...marks: string[]) => ({ type: "text", text: value, marks: marks.map((type) => ({ type })) });
@@ -54,5 +54,33 @@ describe("cutToBudget", () => {
     expect(cut.budgetWords).toBe(20);
     expect(cut.blocks).toHaveLength(1);
     expect(cut.blocks[0].words).toHaveLength(32);
+  });
+});
+
+describe("markBefore", () => {
+  const mark = (first: boolean) => ({ type: "continued", attrs: { first } });
+
+  it("marks the six words before the place, splitting only the text they begin and end in", () => {
+    const block = paragraph(text("one two three four five six seven eight nine"));
+    expect(markBefore(block as never, 8)).toEqual([
+      { type: "text", text: "one two ", marks: [] },
+      { type: "text", text: "three four five six seven eight", marks: [mark(true)] },
+      { type: "text", text: " nine", marks: [] },
+    ]);
+  });
+
+  it("counts words as the feed does, across bold and a line break", () => {
+    const block = paragraph(text("un"), text("believ", "italic"), text("able it"), { type: "hardBreak" }, text("is here"));
+    const marked = markBefore(block as never, 3);
+    expect(marked.map((node) => [node.text ?? "", node.marks?.some((m) => m.type === "continued") ?? false])).toEqual([
+      ["un", true], ["believ", true], ["able it", true], ["", false], ["is", true], [" here", false],
+    ]);
+    expect(marked.filter((node) => node.marks?.some((m) => m.type === "continued" && m.attrs?.first))).toHaveLength(1);
+  });
+
+  it("stops at the end of a block shorter than the place, and marks nothing before the first word", () => {
+    const block = paragraph(text("only two"));
+    expect(markBefore(block as never, 40)).toEqual([{ type: "text", text: "only two", marks: [mark(true)] }]);
+    expect(markBefore(block as never, 0)).toEqual(block.content);
   });
 });

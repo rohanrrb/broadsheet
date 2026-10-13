@@ -4,9 +4,9 @@ import { getEditHistory, getNeighbours, pieceHref, type Writing, type WritingEdi
 import { isEditor } from "@/server/editorSession";
 import { getInstance } from "@/server/instance";
 import { todayConfig } from "@/widgets/config";
+import type { Place } from "@/feed/place";
 import { countWords } from "@/feed/tiptap";
 import { Byline } from "./Byline";
-import { ContinuedFrom } from "./ContinuedFrom";
 import { EditedNote } from "./EditedNote";
 import { NewWriterNote } from "./NewWriterNote";
 import { PieceArrows } from "./PieceArrows";
@@ -17,8 +17,12 @@ import { formatShortDate, writerHref } from "./format";
 import prose from "./Prose.module.css";
 import styles from "./PiecePage.module.css";
 
-/** One piece, set to be read: its headline, byline and text, with the way to the pieces either side. */
-export function PiecePage({ writing }: { writing: Writing }) {
+/**
+ * One piece, set to be read: its headline, byline and text, with the way to
+ * the pieces either side. Opened from a "Continued on" line, it is given the
+ * `place` that line stopped at.
+ */
+export function PiecePage({ writing, place }: { writing: Writing; place?: Place | null }) {
   const db = getInstance();
   const edits = getEditHistory(db, writing.id);
   const { previous, next } = getNeighbours(db, writing);
@@ -50,8 +54,7 @@ export function PiecePage({ writing }: { writing: Writing }) {
           wordCount={countWords(writing.body)}
           edited={edits.length > 0 && <Edited edits={edits} />}
         />
-        <RichText doc={writing.body} headline={writing.title} className={`${styles.body} ${prose.prose}`} />
-        <ContinuedFrom />
+        <RichText doc={writing.body} headline={writing.title} place={place} className={`${styles.body} ${prose.prose}`} />
       </article>
       <PieceArrows previous={previous && arrowTo(previous)} next={next && arrowTo(next)} />
     </main>

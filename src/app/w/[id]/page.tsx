@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import { getWriting, pieceHref, type Writing } from "@/core/writings";
 import { getInstance } from "@/server/instance";
+import { placeIn } from "@/feed/place";
 import { PiecePage, inPrint } from "@/components/PiecePage";
 
 export async function generateMetadata(props: PageProps<"/w/[id]">): Promise<Metadata> {
@@ -18,7 +19,7 @@ export default async function WritingPage(props: PageProps<"/w/[id]">) {
   if (!writing) notFound();
   const href = pieceHref(writing);
   if (href !== `/w/${writing.id}`) permanentRedirect(href);
-  return <PiecePage writing={writing} />;
+  return <PiecePage writing={writing} place={placeIn((await props.searchParams).at)} />;
 }
 
 function findWriting(params: Promise<{ id: string }>): Promise<Writing | undefined> {

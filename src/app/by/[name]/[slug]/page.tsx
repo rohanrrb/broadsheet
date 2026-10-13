@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { findWriter } from "@/core/writers";
 import { getWritingBySlug, type Writing } from "@/core/writings";
 import { getInstance } from "@/server/instance";
+import { placeIn } from "@/feed/place";
 import { PiecePage, inPrint } from "@/components/PiecePage";
 
 export async function generateMetadata(props: PageProps<"/by/[name]/[slug]">): Promise<Metadata> {
@@ -14,7 +15,7 @@ export async function generateMetadata(props: PageProps<"/by/[name]/[slug]">): P
 export default async function WriterPiecePage(props: PageProps<"/by/[name]/[slug]">) {
   const writing = await findWriting(props.params);
   if (!writing) notFound();
-  return <PiecePage writing={writing} />;
+  return <PiecePage writing={writing} place={placeIn((await props.searchParams).at)} />;
 }
 
 async function findWriting(params: Promise<{ name: string; slug: string }>): Promise<Writing | undefined> {

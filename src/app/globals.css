@@ -49,8 +49,11 @@ a {
 }
 
 /* Where a "Continued on" line picks a piece up: the last words the reader saw on the page they came from. */
-::highlight(continued) {
+mark {
   background: #f1d98a;
+  color: inherit;
+  /* The address leads here; the words sit a third of the way down, not under the top edge. */
+  scroll-margin-top: 33vh;
 }
 
 :focus-visible {
