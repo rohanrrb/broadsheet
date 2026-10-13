@@ -1,0 +1,82 @@
+:root {
+  --paper: #f3efe6;
+  --paper-shade: #e4ded1;
+  --ink: #141311;
+  --ink-soft: #2a2724;
+  --muted: #5f5a52;
+  --hairline: rgba(20, 19, 17, 0.28);
+  --faint-rule: rgba(20, 19, 17, 0.14);
+  --accent: #a3201c;
+  /* Market moves: muted, so the figures read as type, not signals. */
+  --market-up: #3d6b45;
+  --market-down: #9b3a2c;
+  --page-width: 84rem;
+  /* The broadsheet grid: one row is one line of body type. */
+  --line: 1.1rem;
+  --body-size: 0.84rem;
+  --col-pad: 0.7rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body), Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  line-height: 1.5;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: #f1d98a;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* The sheet every page is printed on. */
+.paper {
+  max-width: calc(var(--page-width) + 4rem);
+  margin: 0 auto;
+  padding: 0 2rem 1rem;
+}
+
+.empty {
+  padding: 4rem 0;
+  text-align: center;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.empty a {
+  border-bottom: 1px solid var(--hairline);
+}
+
+@media (max-width: 639px) {
+  body {
+    font-size: 16px;
+  }
+
+  .paper {
+    padding: 0 1rem;
+  }
+}

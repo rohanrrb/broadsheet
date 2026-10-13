@@ -1,0 +1,270 @@
+.page {
+  min-height: 100vh;
+  padding-bottom: 3rem;
+}
+
+/* The compact masthead, on the same measure as the paper's pages. */
+.headerFrame {
+  max-width: calc(var(--page-width) + 4rem);
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.headerLabel {
+  color: var(--muted);
+}
+
+.primary {
+  font: inherit;
+  font-size: 0.95rem;
+  font-variant: all-small-caps;
+  letter-spacing: 0.12em;
+  padding: 0.3rem 0.95rem 0.4rem;
+  border: 1px solid var(--ink);
+  cursor: pointer;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.primary:disabled {
+  border-color: var(--hairline);
+  background: transparent;
+  color: var(--muted);
+  cursor: default;
+}
+
+.alert {
+  margin: 0;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--hairline);
+  text-align: center;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--accent);
+}
+
+/* The sheet: the same measure as the reader page. */
+.sheet {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 3rem 0 4rem;
+}
+
+.headline {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  outline: none;
+  resize: none;
+  overflow: hidden;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.012em;
+}
+
+.headline::placeholder {
+  color: rgba(20, 19, 17, 0.22);
+}
+
+.byline {
+  margin: 0.9rem 0 0;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--ink);
+}
+
+.bylineLine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.5rem;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Only "By" is set in small caps: the name keeps the case its writer gave it. */
+.bylineBy {
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+}
+
+.bylineActions {
+  margin-left: auto;
+}
+
+.keyEntry {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.keyInput {
+  flex: 1;
+  min-width: 12rem;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.82rem;
+}
+
+.keyEntry .bylineNote,
+.keyError {
+  flex-basis: 100%;
+}
+
+.keyError {
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--accent);
+}
+
+.bylineInput {
+  width: min(18rem, 70%);
+  padding: 0 0 0.1rem;
+  border: 0;
+  border-bottom: 1px dotted var(--hairline);
+  outline: none;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+}
+
+.bylineInput:focus {
+  border-bottom-color: var(--ink);
+}
+
+.bylineInput::placeholder {
+  color: rgba(20, 19, 17, 0.3);
+}
+
+.bylineNote {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.75rem;
+  font-style: italic;
+  font-variant: normal;
+  letter-spacing: 0;
+  color: var(--muted);
+}
+
+/* The body: Tiptap's contenteditable, set in the reader's type. */
+.body {
+  margin-top: 2rem;
+}
+
+.prose {
+  min-height: 45vh;
+  outline: none;
+  caret-color: var(--accent);
+}
+
+/* Tiptap's default (break-spaces) starts wrapped lines with a space; hang it instead, as print does. */
+.body .prose {
+  white-space: pre-wrap;
+}
+
+.prose :global(p.is-editor-empty:first-child)::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  color: rgba(20, 19, 17, 0.3);
+  font-style: italic;
+  pointer-events: none;
+}
+
+.prose :global(.ProseMirror-selectednode) {
+  outline: 1px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.prose a {
+  cursor: text;
+}
+
+/* Quiet footer: word count on the left, draft status on the right. */
+.footer {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.4rem 2rem 0.45rem;
+  border-top: 1px solid var(--hairline);
+  background: var(--paper);
+  font-size: 0.8rem;
+  font-variant: all-small-caps;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.footerStatus {
+  text-align: right;
+}
+
+.linkButton {
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+/* Drag a file anywhere onto the page. */
+.drop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  background: rgba(243, 239, 230, 0.93);
+  outline: 1px solid var(--ink);
+  outline-offset: -1.2rem;
+  pointer-events: none;
+}
+
+.drop p {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-style: italic;
+}
+
+.drop span {
+  display: block;
+  margin-top: 0.4rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-style: normal;
+  font-variant: all-small-caps;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+@media (max-width: 639px) {
+  .headerFrame {
+    padding: 0 1rem;
+  }
+
+  .headerLabel {
+    display: none;
+  }
+
+  .sheet {
+    padding: 2rem 1rem 3rem;
+  }
+
+  .footer {
+    padding: 0.4rem 1rem 0.45rem;
+    font-size: 0.72rem;
+  }
+}

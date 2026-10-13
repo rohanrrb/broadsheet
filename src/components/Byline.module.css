@@ -1,0 +1,64 @@
+.byline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem 0.6rem;
+  margin: 0.7rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.3;
+  color: var(--muted);
+}
+
+/* The name keeps the case its writer gave it; only "By" is set in small caps. */
+.author {
+  color: var(--ink);
+  font-size: 0.9rem;
+}
+
+.by {
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+}
+
+.meta {
+  font-style: italic;
+}
+
+.author a:hover {
+  border-bottom: 1px solid var(--hairline);
+}
+
+/* "Edited Oct 12": opens a small list of when, set under it over the page. */
+.edited {
+  display: inline-block;
+  position: relative;
+}
+
+.edited summary {
+  display: inline;
+  list-style: none;
+  cursor: pointer;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.edited summary::-webkit-details-marker {
+  display: none;
+}
+
+.edited summary:hover {
+  border-bottom-color: var(--ink);
+}
+
+.edits {
+  position: absolute;
+  z-index: 2;
+  top: calc(100% + 0.4rem);
+  left: 0;
+  margin: 0;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  list-style: none;
+  font-style: normal;
+  white-space: nowrap;
+  font-variant-numeric: lining-nums tabular-nums;
+}

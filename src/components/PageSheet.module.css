@@ -1,0 +1,61 @@
+/*
+ * Narrow screens: one dense column of stories in reading order.
+ * Wide screens (below): the fixed broadsheet grid.
+ */
+.sheet {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--ink);
+}
+
+.module {
+  min-width: 0;
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.module[data-kind="cover"] {
+  border-top: 0;
+  padding-top: 0.4rem;
+}
+
+@media (min-width: 1024px) {
+  .sheet {
+    display: grid;
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    grid-template-rows: repeat(var(--rows), var(--line));
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .module {
+    grid-column: var(--col) / span var(--span-cols);
+    grid-row: var(--row) / span var(--span-rows);
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+    --pad-left: var(--col-pad);
+    --pad-right: var(--col-pad);
+    padding: 0.5rem var(--pad-right) 0.45rem var(--pad-left);
+    border-top: 1px solid var(--hairline);
+    border-left: 1px solid var(--hairline);
+  }
+
+  .module[data-left] {
+    --pad-left: 0px;
+    border-left: 0;
+  }
+
+  .module[data-right] {
+    --pad-right: 0px;
+  }
+
+  .module[data-top] {
+    border-top: 0;
+    padding-top: 0.2rem;
+  }
+
+  .module[data-kind="cover"] {
+    padding: 0;
+  }
+}

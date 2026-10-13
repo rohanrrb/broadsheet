@@ -1,0 +1,48 @@
+/* The piece's own page number, as "Continued on Page W12" promises. */
+.folio {
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.article {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 2.5rem 0 5rem;
+}
+
+/* Only the editor ever sees this, above a piece pulled from the paper. */
+.spiked {
+  margin: 0 0 1.2rem;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid var(--accent);
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--accent);
+}
+
+.spiked a {
+  border-bottom: 1px solid currentColor;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+
+.body {
+  margin-top: 2rem;
+}
+
+.body > p:first-of-type::first-letter {
+  float: left;
+  margin: 0.06em 0.1em 0 0;
+  font-family: var(--font-display);
+  font-size: 3.4em;
+  font-weight: 700;
+  line-height: 0.82;
+}

@@ -1,0 +1,148 @@
+.masthead {
+  padding-top: 0.9rem;
+  /* The nameplate's type size, which a writer's name beside it is placed against. */
+  --plate-size: clamp(3.4rem, 9vw, 7.4rem);
+}
+
+/* Nameplate between two ears. */
+.plate {
+  display: grid;
+  grid-template-columns: 11rem 1fr 11rem;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.9rem 0 0.4rem;
+}
+
+.ear {
+  margin: 0;
+  font-size: 0.72rem;
+  line-height: 1.3;
+  /* The editor's own line breaks are kept. */
+  white-space: pre-line;
+}
+
+.motto {
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--ink);
+  font-family: var(--font-display);
+  font-size: 0.86rem;
+  font-style: italic;
+  text-align: center;
+}
+
+.earRight strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+}
+
+.nameplate {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-nameplate), var(--font-display), serif;
+  font-size: var(--plate-size);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  /* The blackletter's own word space is wide; a name of several words is drawn together a little. */
+  word-spacing: -0.12em;
+}
+
+/*
+ * A writer's page: their name runs into the nameplate from the left, as one
+ * line. The nameplate stays centered, so the name hangs in the left margin.
+ * The two share a baseline, and the name is then raised a hair: the nameplate's
+ * letters stand on points, which reach the baseline but carry little weight
+ * there, so type with flat feet set on the same line looks low beside them.
+ */
+.led {
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: baseline;
+  gap: 1.1rem;
+}
+
+.lead {
+  margin: 0;
+  text-align: right;
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.05;
+  /* Sized against its own column, so a long name shrinks to stay on one line. */
+  container-type: inline-size;
+}
+
+.lead span {
+  display: inline-block;
+  font-size: min(3.6rem, calc(100cqi / var(--lead-ems)));
+  transform: translateY(calc(-0.008 * var(--plate-size)));
+}
+
+.dateline {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  /* Three runs of different sizes share one baseline. */
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.3rem 0;
+  border-top: 1px solid var(--ink);
+  border-bottom: 3px double var(--ink);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.date {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+/* The links are set larger, in small caps: share a baseline with the caps beside them. */
+.datelineEnd {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 0.9rem;
+}
+
+/* Inner pages: the compact masthead, set a little below the page before. */
+.folio {
+  margin-top: 2.5rem;
+}
+
+.folioPage {
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 1023px) {
+  .plate {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+
+  .plate > :not(.nameplate) {
+    display: none;
+  }
+
+  /* The name sits over the nameplate, both centered. */
+  .led > .lead {
+    display: block;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .led .lead span {
+    font-size: 1.9rem;
+    transform: none;
+  }
+
+  /* Date left, Write in the right corner, as in the compact masthead. */
+  .dateline {
+    grid-template-columns: 1fr auto;
+  }
+
+  .dateline > span:first-child {
+    display: none;
+  }
+}

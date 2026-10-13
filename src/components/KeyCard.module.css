@@ -1,0 +1,62 @@
+/* A writer's key: six words, set in a plain face so every letter is certain. */
+.keyCard {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.6rem;
+  margin: 0.5rem 0 0;
+}
+
+.keyWords {
+  padding: 0.25rem 0.6rem;
+  background: var(--paper-shade);
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.85rem;
+  user-select: all;
+}
+
+/* Asking for the key, and copying it: quiet text controls, as on a contact page. */
+.keyReveal,
+.keyCopy {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: color 0.1s ease;
+}
+
+.keyReveal {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--hairline);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.keyReveal:hover {
+  text-decoration-color: var(--ink);
+}
+
+.keyCopy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.keyCopy:hover,
+.keyCopy:focus-visible {
+  color: var(--ink);
+}
+
+.keyCopy[data-done] {
+  color: var(--market-up);
+}
+
+.keyCopy svg {
+  flex: none;
+  width: 1em;
+  height: 1em;
+}

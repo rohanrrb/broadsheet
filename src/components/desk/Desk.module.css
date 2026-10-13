@@ -1,0 +1,478 @@
+/* The editor's desk: a file manager set in the paper's own type and rules. */
+
+.label {
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.intro {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.6rem 0 0.7rem;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.012em;
+}
+
+.summary {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Folders | files, divided like two columns of a page. */
+.desk {
+  display: grid;
+  grid-template-columns: 14rem minmax(0, 1fr);
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+
+.tree {
+  padding: 0.8rem 1rem 1rem 0;
+  border-right: 1px solid var(--hairline);
+  font-size: 0.86rem;
+}
+
+.folders {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.folder {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.22rem 0.5rem;
+  border: 0;
+  background: none;
+  color: var(--ink-soft);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.folder:hover {
+  background: var(--faint-rule);
+}
+
+.folder[aria-current] {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.nested {
+  padding-left: 1.4rem;
+}
+
+.folderName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.count {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.65;
+}
+
+.group > summary {
+  padding: 0.6rem 0.5rem 0.15rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.group:not([open]) > summary {
+  padding-bottom: 0.4rem;
+}
+
+/* Spiked sits apart from the folders of what is in print. */
+.folders > li:last-child:not(:first-child) > .folder:not(.nested) {
+  margin-top: 0.7rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--faint-rule);
+}
+
+.pane {
+  min-width: 0;
+  padding-left: 1rem;
+}
+
+.path {
+  margin: 0;
+  padding: 0.8rem 0 0.1rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-left: -0.45rem;
+  padding: 0.1rem 0 0.3rem;
+}
+
+.error {
+  margin: 0.2rem 0 0.4rem;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--accent);
+}
+
+.listWrap {
+  border-top: 1px solid var(--hairline);
+}
+
+.list {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.list th,
+.list td {
+  padding: 0.34rem 0.6rem;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.list th {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--ink);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.list .num {
+  width: 1%;
+  text-align: right;
+}
+
+.list th:first-child,
+.list td:first-child {
+  padding-left: 0.3rem;
+  color: var(--muted);
+}
+
+.sort {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.sort:hover,
+.list th[aria-sort] {
+  color: var(--ink);
+}
+
+.arrow {
+  display: inline-block;
+  width: 0.9em;
+  text-align: right;
+}
+
+.file {
+  border-bottom: 1px solid var(--faint-rule);
+  cursor: default;
+}
+
+.file:hover {
+  background: var(--faint-rule);
+}
+
+.file[aria-selected="true"] {
+  background: var(--paper-shade);
+}
+
+.file[draggable="true"] {
+  cursor: grab;
+}
+
+.file[data-dragging] {
+  opacity: 0.4;
+}
+
+/* Where a dragged story will land. */
+.file[data-drop="above"] {
+  box-shadow: inset 0 2px 0 var(--accent);
+}
+
+.file[data-drop="below"] {
+  box-shadow: inset 0 -2px 0 var(--accent);
+}
+
+/* The headline takes the room the other columns leave, and is cut to it. */
+.list .headlineCell {
+  width: 100%;
+  max-width: 0;
+}
+
+.name {
+  display: flex;
+  align-items: baseline;
+}
+
+.headline {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: left;
+  cursor: inherit;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.coverTag {
+  flex: none;
+  margin-left: 0.6rem;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.emptyFolder {
+  margin: 0;
+  padding: 2.2rem 0;
+  text-align: center;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.status {
+  margin: 0;
+  padding: 0.5rem 0 0.6rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* Under the files: the editor's few other actions, in a row. */
+.deskLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.6rem;
+  padding: 1.4rem 0 4rem;
+  font-size: 0.88rem;
+}
+
+.envVar {
+  padding: 0 0.25rem;
+  background: var(--paper-shade);
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.74rem;
+  white-space: nowrap;
+}
+
+.textLink {
+  border-bottom: 1px solid var(--hairline);
+}
+
+.textLink:hover {
+  border-bottom-color: var(--ink);
+}
+
+/* The paper's own words: one narrow column of labelled fields. */
+.copy {
+  max-width: 40rem;
+  padding: 1.6rem 0 5rem;
+}
+
+.copyForm {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 1.4rem;
+}
+
+.copyField {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.copyLabel {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.copyUpload {
+  margin-left: 0.9rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.copyInput {
+  margin-top: 0.3rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--hairline);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.copyInput:focus {
+  border-color: var(--ink);
+  outline: none;
+}
+
+.copyActions {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.saved {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.plainButton {
+  padding: 0;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  background: none;
+  color: inherit;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* The closed desk: a title, a sentence, and the key. */
+.door {
+  max-width: 26rem;
+  margin: 0 auto;
+  padding: 4rem 0 6rem;
+}
+
+.doorNote {
+  margin: 0.8rem 0 1.4rem;
+  color: var(--ink-soft);
+}
+
+.doorNote a {
+  border-bottom: 1px solid var(--hairline);
+}
+
+.keyForm {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 0.3rem 1rem;
+}
+
+.keyLabel {
+  grid-column: 1 / -1;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.keyForm .error {
+  grid-column: 1 / -1;
+}
+
+.claimForm {
+  display: grid;
+  justify-items: start;
+  gap: 0.3rem;
+}
+
+.claimForm input {
+  margin-bottom: 0.9rem;
+}
+
+.claimHint {
+  margin: -0.6rem 0 1rem;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--muted);
+}
+
+@media (max-width: 1023px) {
+  .list .wide {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .intro {
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  /* Folders move above the files, as a strip of the same buttons. */
+  .desk {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .tree {
+    max-height: 13rem;
+    overflow-y: auto;
+    padding: 0.6rem 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .pane {
+    padding-left: 0;
+  }
+
+  .list .medium {
+    display: none;
+  }
+
+  .list th,
+  .list td {
+    padding-right: 0.35rem;
+    padding-left: 0.35rem;
+  }
+}

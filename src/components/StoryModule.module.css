@@ -1,0 +1,199 @@
+.story {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
+.kicker {
+  margin: 0 0 0.3rem;
+  font-size: 0.66rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.headline {
+  margin: 0 0 0.45rem;
+  font-family: var(--font-display);
+  font-size: calc(var(--scale) * var(--body-size));
+  font-weight: 500;
+  line-height: 1.06;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  hyphens: manual;
+}
+
+.story[data-kind="lead"] .headline {
+  font-weight: 700;
+}
+
+.story[data-kind="brief"] .headline {
+  font-weight: 700;
+  font-size: 0.98rem;
+  line-height: 1.12;
+}
+
+.headline a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.12em;
+}
+
+.byline {
+  margin: 0 0 0.35rem;
+  font-size: 0.66rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* The name keeps the case its writer gave it. */
+.byline .author {
+  font-size: 0.74rem;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+
+a.author:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
+/* Body type: small, justified, hyphenated, one text column per grid column. */
+.body {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+  columns: var(--span-cols);
+  column-gap: calc(2 * var(--col-pad));
+  column-rule: 1px solid var(--hairline);
+  column-fill: balance;
+  font-size: var(--body-size);
+  line-height: var(--line);
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  hanging-punctuation: first;
+  color: var(--ink-soft);
+}
+
+/* Beside a photo, text takes what it needs and the photo takes up the slack. */
+.bodyBesidePhoto {
+  flex: 0 1 auto;
+}
+
+.body p {
+  margin: 0;
+  text-indent: 1em;
+}
+
+.body p:first-child {
+  text-indent: 0;
+}
+
+/* A subhead from inside the piece: a centred bold crosshead, kept with the text under it. */
+.body p[data-subhead] {
+  margin: 0;
+  text-indent: 0;
+  text-align: center;
+  text-wrap: balance;
+  font-weight: 700;
+  color: var(--ink);
+  hyphens: manual;
+  -webkit-hyphens: manual;
+  break-after: avoid;
+  break-inside: avoid;
+}
+
+.body p[data-subhead] + p {
+  text-indent: 0;
+}
+
+.body b {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.body p[data-jump] {
+  margin-top: 0.15rem;
+  text-indent: 0;
+  text-align: left;
+  font-size: 0.7rem;
+  font-style: italic;
+  font-weight: 600;
+  break-inside: avoid;
+}
+
+.body p[data-jump] a:hover {
+  text-decoration: underline;
+}
+
+/* Columnist treatment. */
+.story[data-kind="opinion"] .headline {
+  font-weight: 400;
+  font-size: calc((var(--scale) + 0.2) * var(--body-size));
+}
+
+.portrait {
+  display: grid;
+  place-items: center;
+  height: calc(6 * var(--line));
+  margin-bottom: 0.35rem;
+  background:
+    repeating-linear-gradient(135deg, transparent 0 2px, rgba(20, 19, 17, 0.14) 2px 3px),
+    var(--paper-shade);
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  font-style: italic;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.portrait span {
+  padding: 0 0.35rem;
+  background: var(--paper);
+  line-height: 1.1;
+}
+
+.columnist {
+  margin: 0 0 0.5rem;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.opinionKicker {
+  margin: 0 0 0.3rem;
+  padding-top: 0.25rem;
+  border-top: 1px solid var(--ink);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1023px) {
+  .story {
+    display: block;
+  }
+
+  .body {
+    columns: 1;
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+
+  .headline {
+    font-size: calc(min(var(--scale), 2.2) * 0.95rem);
+  }
+
+  .portrait {
+    height: 5rem;
+    width: 5rem;
+    float: right;
+    margin: 0 0 0.5rem 0.75rem;
+  }
+}

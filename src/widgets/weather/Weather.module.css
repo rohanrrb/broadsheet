@@ -1,0 +1,8 @@
+/* Set like a market quote: the city in the label's grey, the figure in ink. */
+.city {
+  color: var(--ink-soft);
+}
+
+.temperature {
+  color: var(--ink);
+}

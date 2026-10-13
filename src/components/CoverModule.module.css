@@ -1,0 +1,205 @@
+.cover {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1 1 auto;
+  container-type: inline-size;
+}
+
+.banner {
+  padding: 0.6rem var(--pad-right, 0) 0.7rem var(--pad-left, 0);
+}
+
+/*
+ * Sized to the box and the title's length so it sets in about two lines,
+ * capped so a short title does not turn into a poster.
+ */
+.headline {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: min(5rem, calc(200cqi / (var(--title-chars) * 0.54)));
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.012em;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.cover[data-caps] .headline {
+  font-size: min(4.6rem, calc(200cqi / (var(--title-chars) * 0.74)));
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.headline a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.1em;
+}
+
+.body,
+.bodyTextOnly {
+  display: grid;
+  flex: 1 1 0;
+  min-height: 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.body {
+  grid-template-columns:
+    repeat(var(--photo-cols), minmax(0, 1fr))
+    repeat(var(--side-cols), minmax(0, 1fr));
+}
+
+.figure {
+  grid-column: span var(--photo-cols);
+  margin: 0;
+  padding: 0.5rem var(--col-pad) 0.4rem var(--pad-left, 0);
+  min-height: 0;
+}
+
+.side {
+  grid-column: span var(--side-cols);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 0.6rem var(--pad-right, 0) 0.45rem var(--col-pad);
+  border-left: 1px solid var(--hairline);
+}
+
+.bodyTextOnly .side {
+  grid-column: 1 / -1;
+  border-left: 0;
+  padding-left: var(--pad-left, 0);
+}
+
+.dek {
+  margin: 0 0 0.55rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--hairline);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  line-height: 1.25;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.byline {
+  margin: 0 0 0.35rem;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* The name keeps the case its writer gave it. */
+.author {
+  font-size: 0.74rem;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+
+a.author:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
+.text {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+  columns: var(--side-cols);
+  column-gap: calc(2 * var(--col-pad));
+  column-rule: 1px solid var(--hairline);
+  font-size: var(--body-size);
+  line-height: var(--line);
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  color: var(--ink-soft);
+}
+
+.bodyTextOnly .text {
+  columns: 3;
+}
+
+.text p {
+  margin: 0;
+  text-indent: 1em;
+}
+
+.text p:first-child {
+  text-indent: 0;
+}
+
+/* A subhead from inside the piece: a centred bold crosshead, kept with the text under it. */
+.text p[data-subhead] {
+  margin: 0;
+  text-indent: 0;
+  text-align: center;
+  text-wrap: balance;
+  font-weight: 700;
+  color: var(--ink);
+  hyphens: manual;
+  -webkit-hyphens: manual;
+  break-after: avoid;
+  break-inside: avoid;
+}
+
+.text p[data-subhead] + p {
+  text-indent: 0;
+}
+
+.text b {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.text p[data-jump] {
+  margin-top: 0.15rem;
+  text-indent: 0;
+  text-align: left;
+  font-size: 0.7rem;
+  font-style: italic;
+  font-weight: 600;
+}
+
+@media (max-width: 1023px) {
+  .cover {
+    display: block;
+  }
+
+  /* Up to three lines on a narrow screen. */
+  .headline {
+    font-size: min(3rem, calc(300cqi / (var(--title-chars) * 0.54)));
+  }
+
+  .cover[data-caps] .headline {
+    font-size: min(2.8rem, calc(300cqi / (var(--title-chars) * 0.74)));
+  }
+
+  .body,
+  .bodyTextOnly {
+    display: block;
+    min-height: auto;
+  }
+
+  .figure {
+    padding: 0.6rem 0;
+  }
+
+  .side {
+    display: block;
+    padding: 0.6rem 0 0;
+    border-left: 0;
+  }
+
+  .text,
+  .bodyTextOnly .text {
+    columns: 1;
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+}

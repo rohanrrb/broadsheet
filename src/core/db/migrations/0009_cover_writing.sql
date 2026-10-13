@@ -1,0 +1,1 @@
+ALTER TABLE `instance` ADD `cover_writing_id` integer;

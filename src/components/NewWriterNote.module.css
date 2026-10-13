@@ -1,0 +1,15 @@
+/* Shown once, on a new writer's first piece, above the headline. */
+.note {
+  margin: 0 0 2rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--ink);
+  font-size: 0.88rem;
+}
+
+.note p {
+  margin: 0;
+}
+
+.note p + p {
+  margin-top: 0.6rem;
+}

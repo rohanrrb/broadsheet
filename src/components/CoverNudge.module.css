@@ -1,0 +1,24 @@
+/* A note to the writer alone: small and grey, under the dateline. */
+.nudge {
+  margin: 0;
+  padding: 0.45rem 0 0.1rem;
+  text-align: center;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.hide {
+  margin-left: 0.6rem;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid var(--hairline);
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.hide:hover {
+  color: var(--ink);
+}

@@ -1,0 +1,63 @@
+.figure {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 0.45rem;
+  min-height: 0;
+}
+
+.frame {
+  display: block;
+  position: relative;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: var(--paper-shade);
+}
+
+.frame img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Newsprint: gray, a touch of contrast and warmth, as if printed on the paper. */
+.newsprint {
+  filter: grayscale(1) contrast(1.12) brightness(0.96) sepia(0.08);
+  mix-blend-mode: multiply;
+}
+
+.color {
+  filter: saturate(0.82) contrast(1.04);
+  mix-blend-mode: multiply;
+}
+
+.caption {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding-top: 0.2rem;
+  font-size: 0.66rem;
+  line-height: 1.25;
+  color: var(--ink-soft);
+}
+
+.credit {
+  align-self: flex-end;
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+@media (min-width: 1024px) {
+  /* The photo gets its rows and grows into any slack its box has left. */
+  .figure {
+    flex: 1 0 calc(var(--photo-rows) * var(--line));
+  }
+
+  .frame {
+    flex: 1 1 auto;
+    aspect-ratio: auto;
+  }
+}

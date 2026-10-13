@@ -1,0 +1,86 @@
+/* A ruled index box, set in the rail like a newspaper's "Inside" panel. */
+.box {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0.35rem 0.6rem 0.2rem;
+  border: 1px solid var(--ink);
+  overflow: hidden;
+}
+
+.title {
+  margin: 0;
+  padding-bottom: 0.25rem;
+  border-bottom: 3px double var(--ink);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/*
+ * Items split the box's height into equal bands, content centered, so a
+ * fixed-size box never shows a blank foot and rules fall midway between items.
+ */
+.list {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.5rem 0;
+}
+
+.item + .item {
+  border-top: 1px solid var(--hairline);
+}
+
+.kicker {
+  margin: 0 0 0.15rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.headline {
+  display: -webkit-box;
+  font-family: var(--font-display);
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1.14;
+  text-wrap: balance;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.headline:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+}
+
+.page {
+  margin: 0.3rem 0 0;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.page span {
+  font-weight: 400;
+  color: var(--muted);
+}

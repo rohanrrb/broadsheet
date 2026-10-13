@@ -1,0 +1,41 @@
+/* The field is the page's heading: the same control, a size up. */
+.field {
+  margin-bottom: 1.6rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--hairline);
+  font-size: 1.2rem;
+}
+
+.field input {
+  width: 100%;
+  font-size: 1.1rem;
+}
+
+.field label {
+  width: 100%;
+}
+
+.results {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Every result is set the same way: the headline, then its writer and date beneath. */
+.results li {
+  padding: 0.45rem 0;
+}
+
+.meta {
+  display: block;
+}
+
+.meta,
+.none {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.none {
+  font-style: italic;
+}

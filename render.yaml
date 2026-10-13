@@ -1,0 +1,18 @@
+# Render blueprint, behind the "Deploy to Render" button in the README.
+# One web service running the Dockerfile, with a disk for the paper's file.
+# A disk needs a paid plan, and a service with a disk cannot be scaled out,
+# which is what broadsheet wants: one process per paper.
+services:
+  - type: web
+    name: broadsheet
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: 0.5c-512mb
+    # New releases are deployed by the owner, on purpose, from the dashboard.
+    autoDeployTrigger: "off"
+    healthCheckPath: /about
+    disk:
+      name: paper
+      mountPath: /data
+      sizeGB: 1

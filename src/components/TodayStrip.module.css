@@ -1,0 +1,23 @@
+/* One line above the nameplate: the first widget at the left, the rest pushed right. */
+.strip {
+  display: flex;
+  justify-content: space-between;
+  gap: 2.5rem;
+  padding: 0 0 0.35rem;
+  border-bottom: 1px solid var(--hairline);
+  overflow-x: auto;
+  scrollbar-width: none;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.strip::-webkit-scrollbar {
+  display: none;
+}
+
+.slot {
+  flex: none;
+}

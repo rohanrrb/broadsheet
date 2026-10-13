@@ -1,0 +1,107 @@
+/* A board's notices: each one, then its date in the margin's grey. */
+.notices {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.notices li {
+  padding: 0.7rem 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.notices li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.notices li p {
+  margin: 0 0 0.2rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.meta {
+  display: flex;
+  gap: 0.9rem;
+  align-items: baseline;
+}
+
+.meta,
+.none,
+.count,
+.over {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.none {
+  font-style: italic;
+}
+
+.form {
+  margin: 0 0 1.8rem;
+}
+
+.field {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.formEnd {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 0.5rem;
+}
+
+.count,
+.over {
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.over,
+.error {
+  color: var(--accent);
+}
+
+.error {
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+}
+
+.post,
+.remove {
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid var(--hairline);
+  background: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-variant: all-small-caps;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+}
+
+.remove {
+  font-size: 0.85rem;
+}
+
+.post:hover:not(:disabled),
+.remove:hover {
+  border-bottom-color: var(--ink);
+}
+
+.post:disabled {
+  color: var(--muted);
+  cursor: default;
+}

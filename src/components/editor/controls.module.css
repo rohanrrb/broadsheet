@@ -1,0 +1,165 @@
+/* Text controls in small caps: no icons, no color, an underline for "on". */
+
+.control {
+  padding: 0.25rem 0.45rem 0.3rem;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.92rem;
+  font-variant: all-small-caps;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.control:hover {
+  color: var(--ink);
+}
+
+.control[data-active] {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+
+.control:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.bold {
+  font-weight: 800;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+}
+
+.divider {
+  width: 1px;
+  height: 0.9rem;
+  margin: 0 0.3rem;
+  background: var(--hairline);
+}
+
+/* The toolbar sits under the running head and stays in reach while scrolling. */
+.toolbarWrap {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--paper);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  /* The text column, plus the controls' own padding so labels line up with it. */
+  max-width: calc(40rem + 0.9rem);
+  margin: 0 auto;
+  padding: 0.2rem 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+/* Floating menu over a selection. */
+.bubble {
+  display: flex;
+  align-items: center;
+  padding: 0.1rem 0.25rem;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  box-shadow: 0 2px 0 rgba(20, 19, 17, 0.12);
+}
+
+.field {
+  display: grid;
+  grid-template-columns: minmax(0, 17rem) repeat(3, auto);
+  align-items: center;
+  gap: 0 0.1rem;
+  width: min(26rem, calc(100vw - 2rem));
+  padding: 0.1rem 0.15rem 0.1rem 0.35rem;
+}
+
+.fieldLabel {
+  display: flex;
+}
+
+.input {
+  width: 100%;
+  min-width: 0;
+  padding: 0.2rem 0.1rem;
+  border: 0;
+  border-bottom: 1px solid var(--hairline);
+  outline: none;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.92rem;
+}
+
+.input:focus {
+  border-bottom-color: var(--ink);
+}
+
+.input::placeholder {
+  color: rgba(20, 19, 17, 0.35);
+  font-style: italic;
+}
+
+.fieldError {
+  grid-column: 1 / -1;
+  margin: 0.2rem 0 0.1rem;
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--accent);
+}
+
+.imageForm {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1.3fr) auto;
+  gap: 0.4rem 1rem;
+  align-items: center;
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 0.3rem 0 0.6rem;
+}
+
+.imageForm .fieldError {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .toolbar,
+  .imageForm {
+    padding-right: 1rem;
+    padding-left: 0.6rem;
+  }
+
+  .toolbar {
+    flex-wrap: wrap;
+    gap: 0 1rem;
+  }
+
+  .imageForm {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

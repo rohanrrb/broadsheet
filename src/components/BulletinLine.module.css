@@ -1,0 +1,27 @@
+/* One line above the nameplate. What does not fit is cut off, never wrapped. */
+.line {
+  display: block;
+  padding: 0 0 0.35rem;
+  border-bottom: 1px solid var(--hairline);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.label {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.item {
+  margin-left: 1.6rem;
+}
+
+.date {
+  color: var(--muted);
+  font-variant-numeric: lining-nums;
+}

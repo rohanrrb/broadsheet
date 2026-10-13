@@ -1,0 +1,1 @@
+ALTER TABLE `writings` ADD `spiked_at` integer;

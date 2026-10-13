@@ -1,0 +1,22 @@
+/* A ticker: label, arrow, move. Colour carries the direction as well as the arrow. */
+.quote {
+  color: var(--ink-soft);
+}
+
+.move {
+  font-variant-numeric: lining-nums tabular-nums;
+  color: var(--muted);
+}
+
+.arrow {
+  margin-right: 0.2em;
+  font-size: 0.72em;
+}
+
+.move[data-direction="up"] {
+  color: var(--market-up);
+}
+
+.move[data-direction="down"] {
+  color: var(--market-down);
+}

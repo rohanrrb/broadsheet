@@ -1,0 +1,44 @@
+/* The paper's own pages: a short note set off the left margin, with nothing ruled or boxed. */
+
+.note {
+  max-width: 30rem;
+  margin-left: clamp(0rem, 6vw, 7rem);
+  padding: 12vh 0 6rem;
+}
+
+.title {
+  margin: 0 0 1.4rem;
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.note p {
+  margin: 0 0 1.1rem;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+.note a {
+  text-decoration: underline;
+  text-decoration-color: var(--hairline);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.15s;
+}
+
+.note a:hover {
+  text-decoration-color: var(--ink);
+}
+
+@media (max-width: 639px) {
+  .note {
+    margin-left: 0;
+    padding-top: 8vh;
+  }
+
+  .title {
+    font-size: 2.1rem;
+  }
+}

@@ -1,0 +1,90 @@
+/*
+ * The compact masthead. Its type, rule, and Write link match the front
+ * page's dateline, so the paper reads as one system on every surface.
+ */
+.head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 0 0.5rem;
+  border-bottom: 3px double var(--ink);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.start,
+.end {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+.end {
+  justify-content: flex-end;
+}
+
+.nameplate {
+  font-family: var(--font-nameplate), var(--font-display), serif;
+  font-size: 1.9rem;
+  line-height: 1;
+  letter-spacing: 0;
+  word-spacing: -0.12em;
+  text-transform: none;
+}
+
+.write {
+  font-size: 0.95rem;
+  font-variant: all-small-caps;
+  text-transform: none;
+  letter-spacing: 0.12em;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.write:hover {
+  border-bottom-color: var(--ink);
+}
+
+/* A button set as one of the links beside it. */
+.asLink {
+  padding: 0;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  background: none;
+  color: inherit;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+
+.shortDate {
+  display: none;
+}
+
+@media (max-width: 639px) {
+  .head {
+    gap: 0.5rem;
+    padding: 0.7rem 0 0.4rem;
+    font-size: 0.66rem;
+  }
+
+  .nameplate {
+    font-size: 1.6rem;
+  }
+
+  /* Three links do not fit beside the nameplate: Edit stays, and the byline below leads to the writer's page. */
+  .end:has(.edit) .own {
+    display: none;
+  }
+
+  .longDate {
+    display: none;
+  }
+
+  .shortDate {
+    display: inline;
+  }
+}

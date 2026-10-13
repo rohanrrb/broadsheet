@@ -1,0 +1,26 @@
+.status {
+  padding: 2rem 0 3rem;
+  border-top: 1px solid var(--ink);
+  text-align: center;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.retry {
+  font: inherit;
+  color: var(--ink);
+  background: none;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  cursor: pointer;
+}
+
+.end {
+  margin: 0;
+  padding: 2rem 0 4rem;
+  border-top: 5px double var(--ink);
+  text-align: center;
+  font-family: var(--font-display);
+  letter-spacing: 0.2em;
+  color: var(--muted);
+}
