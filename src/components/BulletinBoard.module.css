@@ -28,15 +28,10 @@
 }
 
 .meta,
-.none,
 .count,
 .over {
   font-size: 0.85rem;
   color: var(--muted);
-}
-
-.none {
-  font-style: italic;
 }
 
 .form {

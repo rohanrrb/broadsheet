@@ -62,9 +62,7 @@ export function BulletinBoard({ notices, writer, editor }: BulletinBoardProps) {
           {error}
         </p>
       )}
-      {notices.length === 0 ? (
-        <p className={styles.none}>Nothing posted.</p>
-      ) : (
+      {notices.length > 0 && (
         <ol className={styles.notices}>
           {notices.map((notice) => (
             <li key={notice.id}>
