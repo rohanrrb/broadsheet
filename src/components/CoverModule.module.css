@@ -1,4 +1,5 @@
 .cover {
+  position: relative;
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -32,7 +33,22 @@
   letter-spacing: 0;
 }
 
-.headline a:hover {
+/* The headline's link reaches over the whole box, so a click anywhere on the story opens it. */
+.headline a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+/* What leads somewhere else stays usable above it. */
+.banner form,
+a.author,
+.text p[data-jump] a {
+  position: relative;
+  z-index: 1;
+}
+
+.cover:has(.side:hover, .figure:hover, .headline:hover) .headline a {
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 0.1em;

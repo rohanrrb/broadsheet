@@ -1,8 +1,23 @@
 .story {
+  position: relative;
   display: flex;
   flex-direction: column;
   min-height: 0;
   flex: 1 1 auto;
+}
+
+/* The headline's link reaches over the whole box, so a click anywhere on the story opens it. */
+.headline a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+/* What leads somewhere else stays clickable above it. */
+a.author,
+.body p[data-jump] a {
+  position: relative;
+  z-index: 1;
 }
 
 .kicker {
@@ -35,7 +50,7 @@
   line-height: 1.12;
 }
 
-.headline a:hover {
+.story:hover .headline a {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.12em;
