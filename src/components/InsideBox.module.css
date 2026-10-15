@@ -34,7 +34,7 @@
 }
 
 .item {
-  position: relative;
+  cursor: pointer;
   display: flex;
   flex: 1 1 0;
   flex-direction: column;
@@ -84,11 +84,4 @@
 .page span {
   font-weight: 400;
   color: var(--muted);
-}
-
-/* The headline's link reaches over the whole item, so a click anywhere on it turns to the story. */
-.headline::after {
-  content: "";
-  position: absolute;
-  inset: 0;
 }

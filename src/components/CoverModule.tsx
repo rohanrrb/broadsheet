@@ -30,7 +30,7 @@ export function CoverModule({ module }: { module: FeedModuleView }) {
   } as CSSProperties;
 
   return (
-    <div className={styles.cover} style={style} data-caps={caps || undefined}>
+    <div className={styles.cover} style={style} data-caps={caps || undefined} data-tile-href={href}>
       <header className={styles.banner}>
         <SearchBar centered />
         <h1 className={styles.headline}>

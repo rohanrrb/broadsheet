@@ -1,23 +1,13 @@
 .story {
-  position: relative;
   display: flex;
   flex-direction: column;
   min-height: 0;
   flex: 1 1 auto;
 }
 
-/* The headline's link reaches over the whole box, so a click anywhere on the story opens it. */
-.headline a::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-}
-
-/* What leads somewhere else stays clickable above it. */
-a.author,
-.body p[data-jump] a {
-  position: relative;
-  z-index: 1;
+/* A click anywhere on the box opens the story: see TileClicks. */
+.story {
+  cursor: pointer;
 }
 
 .kicker {

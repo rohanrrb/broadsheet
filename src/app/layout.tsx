@@ -3,6 +3,7 @@ import { Playfair_Display, Source_Serif_4, UnifrakturMaguntia } from "next/font/
 import { connection } from "next/server";
 import { getInstanceSettings } from "@/core/db";
 import { getInstance } from "@/server/instance";
+import { TileClicks } from "@/components/TileClicks";
 import "./globals.css";
 
 const display = Playfair_Display({
@@ -38,7 +39,10 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${display.variable} ${body.variable} ${nameplate.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <TileClicks />
+      </body>
     </html>
   );
 }

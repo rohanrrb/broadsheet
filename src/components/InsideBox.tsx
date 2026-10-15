@@ -19,7 +19,7 @@ export function InsideBox({ teasers }: { teasers: readonly FeedTeaser[] }) {
 
 function InsideItem({ teaser: { article, page } }: { teaser: FeedTeaser }) {
   return (
-    <li className={styles.item}>
+    <li className={styles.item} data-tile-href={articleHref(article)}>
       <p className={styles.kicker}>{article.kicker}</p>
       <Link href={articleHref(article)} className={styles.headline}>
         {article.title}

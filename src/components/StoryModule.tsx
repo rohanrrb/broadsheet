@@ -16,7 +16,7 @@ export function StoryModule({ module, eager = false }: { module: FeedModuleView;
   const photo = module.imageRows > 0 && article.imageUrl ? { ...article, imageUrl: article.imageUrl } : null;
 
   return (
-    <div className={styles.story} data-kind={kind} style={style}>
+    <div className={styles.story} data-kind={kind} style={style} data-tile-href={href}>
       {kind !== "opinion" && <p className={styles.kicker}>{article.kicker}</p>}
       <h2 className={styles.headline}>
         <Link href={href}>{article.title}</Link>
