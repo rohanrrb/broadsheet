@@ -60,6 +60,14 @@ describe("publishWriting", () => {
     expect(getWriting(db, id)).toMatchObject({ author: "Ana" });
   });
 
+  it("scores the body for how it reads as AI-written", () => {
+    const stockPhrasing = body(
+      "It's important to note that in today's fast-paced world, we must delve into the realm of possibility.",
+    );
+    const id = publish({ ...draft, body: stockPhrasing });
+    expect(getWriting(db, id)!.aiScore).toBeGreaterThan(0);
+  });
+
   it.each([
     ["no key", { key: undefined }],
     ["a wrong key", { key: "acorn-acorn-acorn-acorn-acorn-acorn" }],
@@ -103,6 +111,16 @@ describe("saveWritingEdit", () => {
 
   it("reports a missing writing as a 404", () => {
     expect(saveWritingEdit(db, 999, { title: "x", body: body("x") })).toMatchObject({ ok: false, status: 404 });
+  });
+
+  it("rescores the body on every edit", () => {
+    const id = publish();
+    expect(getWriting(db, id)!.aiScore).toBe(0);
+    const stockPhrasing = body(
+      "It's important to note that in today's fast-paced world, we must delve into the realm of possibility.",
+    );
+    saveWritingEdit(db, id, { title: "New", body: stockPhrasing, key: ana.key });
+    expect(getWriting(db, id)!.aiScore).toBeGreaterThan(0);
   });
 });
 

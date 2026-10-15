@@ -1,4 +1,5 @@
-import type { InstanceDb } from "@/core/db";
+import type { InstanceDb, TiptapDoc } from "@/core/db";
+import { detectAiInWriting } from "@/core/ai";
 import {
   WritingNotFoundError,
   createWriting,
@@ -33,7 +34,7 @@ export function publishWriting(db: InstanceDb, json: unknown, client: string = U
     const piece = parseWritingChanges(json);
     const writer = authenticateWriter(db, fields.name, fields.key, client);
     if (!writer) throw new NotTheWriterError("That moniker and credential do not match. Check the credential, or start a new moniker.");
-    return createWriting(db, { ...piece, author: writer.name, writerId: writer.id });
+    return createWriting(db, { ...piece, author: writer.name, writerId: writer.id, aiScore: scoreOf(piece.body) });
   });
 }
 
@@ -61,7 +62,7 @@ export function saveWritingEdit(
         403,
       );
     }
-    return editWriting(db, id, changes);
+    return editWriting(db, id, { ...changes, aiScore: scoreOf(changes.body) });
   });
 }
 
@@ -74,8 +75,13 @@ function mayEdit(
   return writerId === null ? by.editor : isWritersKey(db, writerId, key, by.client);
 }
 
+/** A heuristic guess at whether the body reads as AI-written, for the desk alone to see. */
+function scoreOf(body: TiptapDoc): number {
+  return detectAiInWriting(body).score;
+}
+
 /** Bylines are fixed at publication; an edit changes only the headline and body. */
-function parseWritingChanges(json: unknown): Required<WritingChanges> {
+function parseWritingChanges(json: unknown): Required<Pick<WritingChanges, "title" | "body">> {
   const fields = asRecord(json);
   return {
     title: requiredText(fields.title, "headline", MAX_TITLE_LENGTH),

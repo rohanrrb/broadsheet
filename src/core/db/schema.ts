@@ -96,6 +96,12 @@ export const writings = sqliteTable(
      * is in print. A spiked writing keeps its date, edits and feed position.
      */
     spikedAt: integer("spiked_at", { mode: "timestamp_ms" }),
+    /**
+     * A heuristic guess (`detectAi`) at whether the text reads as AI-written,
+     * 0 to 1; null for writings from before this existed. Set on publication
+     * and refreshed on each edit. Shown only on the desk, never to readers.
+     */
+    aiScore: real("ai_score"),
   },
   (t) => [uniqueIndex("writings_writer_slug_idx").on(t.writerId, t.slug)],
 );

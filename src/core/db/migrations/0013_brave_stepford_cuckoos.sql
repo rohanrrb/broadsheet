@@ -1,0 +1,1 @@
+ALTER TABLE `writings` ADD `ai_score` real;

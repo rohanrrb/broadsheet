@@ -1,4 +1,5 @@
 import { useState, type DragEvent, type KeyboardEvent } from "react";
+import { AI_FLAG_THRESHOLD } from "@/core/ai";
 import type { DeskFile } from "@/desk/files";
 import type { Placement, Sort, SortKey } from "@/desk/folders";
 import styles from "./Desk.module.css";
@@ -117,6 +118,11 @@ export function FileList({ files, sort, onSort, selectedId, onSelect, onOpen, on
                     {file.headline}
                   </button>
                   {file.cover && <span className={styles.coverTag}>Cover</span>}
+                  {isFlagged(file) && (
+                    <span className={styles.aiTag} title={`Reads as possibly AI-written (score ${file.aiScore?.toFixed(2)})`}>
+                      AI?
+                    </span>
+                  )}
                 </span>
               </td>
               <td className={styles.wide}>{file.author}</td>
@@ -136,6 +142,10 @@ export function FileList({ files, sort, onSort, selectedId, onSelect, onOpen, on
       {files.length === 0 && <p className={styles.emptyFolder}>This folder is empty.</p>}
     </div>
   );
+}
+
+function isFlagged(file: DeskFile): boolean {
+  return file.aiScore !== null && file.aiScore >= AI_FLAG_THRESHOLD;
 }
 
 /** The element to focus to put the keyboard on a file's row. */

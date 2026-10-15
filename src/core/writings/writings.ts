@@ -11,8 +11,8 @@ export type Writing = typeof writings.$inferSelect;
 export type WritingEdit = typeof writingEdits.$inferSelect;
 
 /** Dates are deliberately absent: broadsheet sets them. */
-export type NewWriting = { title: string; body: TiptapDoc; author: string; writerId?: number };
-export type WritingChanges = { title?: string; body?: TiptapDoc };
+export type NewWriting = { title: string; body: TiptapDoc; author: string; writerId?: number; aiScore?: number };
+export type WritingChanges = { title?: string; body?: TiptapDoc; aiScore?: number };
 
 export type FeedPage = { items: Writing[]; nextCursor: string | null };
 
@@ -29,6 +29,7 @@ export function createWriting(db: InstanceDb, input: NewWriting): Writing {
         writerId: input.writerId,
         createdAt: now,
         position: nextTopPosition(tx, now),
+        aiScore: input.aiScore,
       })
       .returning()
       .get();
@@ -59,6 +60,7 @@ export function editWriting(db: InstanceDb, id: number, changes: WritingChanges)
     const current = requireWriting(tx, id);
     const next = { title: changes.title ?? current.title, body: changes.body ?? current.body };
     if (!differs(current, next)) return current;
+    const withScore = { ...next, aiScore: changes.aiScore ?? current.aiScore };
 
     tx.insert(writingEdits)
       .values({
@@ -68,7 +70,7 @@ export function editWriting(db: InstanceDb, id: number, changes: WritingChanges)
         previousBody: current.body,
       })
       .run();
-    return tx.update(writings).set(next).where(eq(writings.id, id)).returning().get();
+    return tx.update(writings).set(withScore).where(eq(writings.id, id)).returning().get();
   });
 }
 

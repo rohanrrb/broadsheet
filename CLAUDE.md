@@ -31,6 +31,7 @@ npm run dev    # http://localhost:3000
 | --- | --- |
 | `src/core/db` | The schema, migrations and `openInstance`. One instance is one SQLite file. |
 | `src/core/writings`, `src/core/writers`, `src/core/notices` | The rules about writings, pen names and bulletins, as plain functions over the database. |
+| `src/core/ai` | A heuristic guess at whether a writing reads as AI-written (`detectAiInWriting`), scored on publish and each edit, shown only on the desk. |
 | `src/core/layout` | The layout engine: recipes, the slicer, cover selection. Pure TypeScript. |
 | `src/feed` | Turns writings into laid-out pages ready to render: sections, cursors, search, text cut to fit. |
 | `src/editor` | The document vocabulary (`schema.ts`), import and export formats, and what the browser keeps (drafts, identity). |

@@ -31,6 +31,8 @@ export interface DeskFile {
   cover: boolean;
   /** Whether the editor put it on the cover. It stays chosen while spiked, and returns to the cover when restored. */
   pinned: boolean;
+  /** A heuristic guess at whether it reads as AI-written, 0 to 1; null for writings from before this existed. */
+  aiScore: number | null;
 }
 
 /** Everything the desk shows about the paper itself. */
@@ -76,5 +78,6 @@ function describe(writing: Writing, plan: FeedPlan, timeZone: string): Omit<Desk
     unsigned: writing.writerId === null,
     page: plan.pageOf.get(id) ?? null,
     cover: plan.coverId === id,
+    aiScore: writing.aiScore,
   };
 }

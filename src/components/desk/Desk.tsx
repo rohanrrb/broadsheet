@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { AI_FLAG_THRESHOLD } from "@/core/ai";
 import type { DeskFile } from "@/desk/files";
 import {
   FEED_ORDER,
@@ -89,14 +90,16 @@ export function Desk({ instanceName, files: serverFiles }: DeskProps) {
 
 function describeFile(file: DeskFile): string {
   const where = file.spiked ? "spiked, hidden from readers" : `page ${file.page ?? "?"}${file.cover ? ", the cover story" : ""}`;
-  return [
+  const parts = [
     `W${file.id}`,
     `by ${file.author}`,
     `published ${file.publishedOn}`,
     `${file.words.toLocaleString("en-US")} words`,
     `edited ${file.editsUsed} ${file.editsUsed === 1 ? "time" : "times"}`,
     where,
-  ].join(" · ");
+  ];
+  if (file.aiScore !== null && file.aiScore >= AI_FLAG_THRESHOLD) parts.push("reads as possibly AI-written");
+  return parts.join(" · ");
 }
 
 function describeFolder(files: DeskFile[], inFeedOrder: boolean): string {

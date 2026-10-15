@@ -19,6 +19,7 @@ function file(id: number, fields: Partial<DeskFile> = {}): DeskFile {
     page: 1,
     cover: false,
     pinned: false,
+    aiScore: null,
     ...fields,
   };
 }

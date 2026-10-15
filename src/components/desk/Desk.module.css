@@ -267,6 +267,19 @@
   color: var(--accent);
 }
 
+.aiTag {
+  flex: none;
+  margin-left: 0.6rem;
+  padding: 0.05rem 0.3rem;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+}
+
 .emptyFolder {
   margin: 0;
   padding: 2.2rem 0;
