@@ -156,3 +156,25 @@ export const images = sqliteTable(
   },
   (t) => [index("images_writer_idx").on(t.writerId, t.createdAt)],
 );
+
+/**
+ * What readers say about a piece: plain text under a pen name, set in the
+ * column beside it. A comment goes with its piece and with its writer.
+ */
+export const comments = sqliteTable(
+  "comments",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    writingId: integer("writing_id")
+      .notNull()
+      .references(() => writings.id, { onDelete: "cascade" }),
+    writerId: integer("writer_id")
+      .notNull()
+      .references(() => writers.id, { onDelete: "cascade" }),
+    /** The name as printed, fixed when the comment was posted. */
+    author: text("author").notNull(),
+    text: text("text").notNull(),
+    createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
+  },
+  (t) => [index("comments_writing_idx").on(t.writingId)],
+);

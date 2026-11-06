@@ -1,6 +1,8 @@
 import Link from "next/link";
+import { countComments } from "@/core/comments";
 import { getInstanceSettings } from "@/core/db";
 import { getEditHistory, getNeighbours, pieceHref, type Writing, type WritingEdit } from "@/core/writings";
+import { readComments } from "@/server/comments";
 import { isEditor } from "@/server/editorSession";
 import { getInstance } from "@/server/instance";
 import { todayConfig } from "@/widgets/config";
@@ -8,6 +10,7 @@ import type { Place } from "@/feed/place";
 import { countWords } from "@/feed/tiptap";
 import { Byline } from "./Byline";
 import { ClearPlace } from "./ClearPlace";
+import { CommentColumn } from "./CommentColumn";
 import { EditedNote } from "./EditedNote";
 import { NewWriterNote } from "./NewWriterNote";
 import { PieceArrows } from "./PieceArrows";
@@ -20,13 +23,15 @@ import styles from "./PiecePage.module.css";
 
 /**
  * One piece, set to be read: its headline, byline and text, with the way to
- * the pieces either side. Opened from a "Continued on" line, it is given the
- * `place` that line stopped at.
+ * the pieces either side, and readers' comments in a column beside it.
+ * Opened from a "Continued on" line, it is given the `place` that line
+ * stopped at.
  */
-export function PiecePage({ writing, place }: { writing: Writing; place?: Place | null }) {
+export async function PiecePage({ writing, place }: { writing: Writing; place?: Place | null }) {
   const db = getInstance();
   const edits = getEditHistory(db, writing.id);
   const { previous, next } = getNeighbours(db, writing);
+  const { timeZone } = todayConfig().location;
 
   return (
     <main className="paper">
@@ -40,24 +45,37 @@ export function PiecePage({ writing, place }: { writing: Writing; place?: Place 
           </>
         }
       />
-      <article className={styles.article}>
-        {writing.spikedAt && (
-          <p className={styles.spiked}>
-            Spiked: readers cannot see this piece. Restore it from <Link href="/desk">the desk</Link>.
-          </p>
-        )}
-        <NewWriterNote />
-        <h1 className={styles.title}>{writing.title}</h1>
-        <Byline
-          author={writing.author}
-          href={writing.writerId ? writerHref(writing.author) : undefined}
-          createdAt={writing.createdAt.toISOString()}
-          wordCount={countWords(writing.body)}
-          edited={edits.length > 0 && <Edited edits={edits} />}
-        />
-        <RichText doc={writing.body} headline={writing.title} place={place} className={`${styles.body} ${prose.prose}`} />
-        {place && <ClearPlace />}
-      </article>
+      <div className={styles.spread}>
+        <article className={styles.article}>
+          {writing.spikedAt && (
+            <p className={styles.spiked}>
+              Spiked: readers cannot see this piece. Restore it from <Link href="/desk">the desk</Link>.
+            </p>
+          )}
+          <NewWriterNote />
+          <h1 className={styles.title}>{writing.title}</h1>
+          <Byline
+            author={writing.author}
+            href={writing.writerId ? writerHref(writing.author) : undefined}
+            createdAt={writing.createdAt.toISOString()}
+            wordCount={countWords(writing.body)}
+            edited={edits.length > 0 && <Edited edits={edits} />}
+          />
+          <RichText doc={writing.body} headline={writing.title} place={place} className={`${styles.body} ${prose.prose}`} />
+          {place && <ClearPlace />}
+        </article>
+        <aside className={styles.side}>
+          <div className={styles.sideInner}>
+            <CommentColumn
+              writingId={writing.id}
+              first={readComments(db, writing.id, {}, timeZone)}
+              count={countComments(db, writing.id)}
+              editor={await isEditor()}
+              here={pieceHref(writing)}
+            />
+          </div>
+        </aside>
+      </div>
       <PieceArrows previous={previous && arrowTo(previous)} next={next && arrowTo(next)} />
     </main>
   );
