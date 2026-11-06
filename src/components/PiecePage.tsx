@@ -7,6 +7,7 @@ import { isEditor } from "@/server/editorSession";
 import { getInstance } from "@/server/instance";
 import { todayConfig } from "@/widgets/config";
 import type { Place } from "@/feed/place";
+import { readRelated } from "@/feed/related";
 import { countWords } from "@/feed/tiptap";
 import { Byline } from "./Byline";
 import { ClearPlace } from "./ClearPlace";
@@ -14,6 +15,7 @@ import { CommentColumn } from "./CommentColumn";
 import { EditedNote } from "./EditedNote";
 import { NewWriterNote } from "./NewWriterNote";
 import { PieceArrows } from "./PieceArrows";
+import { RelatedColumn } from "./RelatedColumn";
 import { RichText } from "./RichText";
 import { RunningHead, WriteLink } from "./RunningHead";
 import { OwnEditLink } from "./WriterLinks";
@@ -23,8 +25,9 @@ import styles from "./PiecePage.module.css";
 
 /**
  * One piece, set to be read: its headline, byline and text, with the way to
- * the pieces either side, and readers' comments in a column beside it.
- * Opened from a "Continued on" line, it is given the `place` that line
+ * the pieces either side, readers' comments in a column beside it, and
+ * where the screen is wide, a column of pieces to read next on the other
+ * side. Opened from a "Continued on" line, it is given the `place` that line
  * stopped at.
  */
 export async function PiecePage({ writing, place }: { writing: Writing; place?: Place | null }) {
@@ -73,6 +76,11 @@ export async function PiecePage({ writing, place }: { writing: Writing; place?: 
               editor={await isEditor()}
               here={pieceHref(writing)}
             />
+          </div>
+        </aside>
+        <aside className={styles.more}>
+          <div className={styles.sideInner}>
+            <RelatedColumn articles={readRelated(db, writing)} />
           </div>
         </aside>
       </div>
