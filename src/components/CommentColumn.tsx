@@ -117,10 +117,25 @@ export function CommentColumn({ writingId, first, count, editor, here }: Comment
 
   return (
     <section className={styles.column} aria-label="Comments">
-      <h2 className={styles.title}>
-        Comments
-        {total > 0 && <span className={styles.count}>{total}</span>}
-      </h2>
+      <h2 className={styles.title}>Comments</h2>
+      <p className={styles.folio}>
+        <span className={styles.count}>{total > 0 && total}</span>
+        {total > 1 && (
+          <span className={styles.orders}>
+            {ORDERS.map(([value, label]) => (
+              <button
+                key={value}
+                type="button"
+                className={styles.order}
+                aria-pressed={order === value}
+                onClick={() => reorder(value)}
+              >
+                {label}
+              </button>
+            ))}
+          </span>
+        )}
+      </p>
       <div className={styles.compose} style={awake ? undefined : { visibility: "hidden" }}>
         {identity ? (
           <CommentForm writingId={writingId} identity={identity} onPosted={posted} />
@@ -130,21 +145,6 @@ export function CommentColumn({ writingId, first, count, editor, here }: Comment
           </Link>
         )}
       </div>
-      {total > 1 && (
-        <p className={styles.orders}>
-          {ORDERS.map(([value, label]) => (
-            <button
-              key={value}
-              type="button"
-              className={styles.order}
-              aria-pressed={order === value}
-              onClick={() => reorder(value)}
-            >
-              {label}
-            </button>
-          ))}
-        </p>
-      )}
       {error && (
         <p className={styles.error} role="alert">
           {error}
@@ -155,28 +155,39 @@ export function CommentColumn({ writingId, first, count, editor, here }: Comment
           const own = ownerOf(comment);
           return (
             <li key={comment.id} className={styles.comment}>
-              <p className={styles.byline}>
+              <div className={styles.text}>
+                {comment.text.split("\n\n").map((paragraph, i) => (
+                  <p key={i}>{i === 0 ? <Lede paragraph={paragraph} /> : paragraph}</p>
+                ))}
+              </div>
+              <p className={styles.signoff}>
                 <Link href={comment.href} className={styles.author}>
                   {comment.author}
                 </Link>
                 <time dateTime={comment.dateTime}>{comment.date}</time>
+                {(own || editor) && (
+                  <button type="button" className={styles.remove} onClick={() => remove(comment, own)}>
+                    Remove
+                  </button>
+                )}
               </p>
-              <div className={styles.text}>
-                {comment.text.split("\n\n").map((paragraph, i) => (
-                  <p key={i}>{paragraph}</p>
-                ))}
-              </div>
-              {(own || editor) && (
-                <button type="button" className={styles.remove} onClick={() => remove(comment, own)}>
-                  Remove
-                </button>
-              )}
             </li>
           );
         })}
       </ol>
       <div ref={foot} className={styles.foot} />
     </section>
+  );
+}
+
+/** A comment's opening words set in small caps, run into the rest, as a newspaper opens a story. */
+function Lede({ paragraph }: { paragraph: string }) {
+  const [, lede, rest] = /^(\S+(?:\s+\S+){0,2})([\s\S]*)$/.exec(paragraph) ?? [, paragraph, ""];
+  return (
+    <>
+      <span className={styles.lede}>{lede}</span>
+      {rest}
+    </>
   );
 }
 

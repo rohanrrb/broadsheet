@@ -1,42 +1,81 @@
-/* Readers' comments, set like a letters column: small justified type between hairlines. */
+/*
+ * Readers' comments, set as a letters column: a section flag under a heavy
+ * rule, then each letter in small justified type, its first words in small
+ * caps, signed off at the foot, with a short centred rule between letters.
+ */
 .column {
   font-size: var(--body-size);
   line-height: var(--line);
 }
 
-/* Headed like the front page's Inside box. */
+/* The section's flag: a heavy rule over a large display head. */
 .title {
-  display: flex;
-  justify-content: center;
-  align-items: baseline;
-  gap: 0.5rem;
   margin: 0;
-  padding-bottom: 0.3rem;
-  border-bottom: 3px double var(--ink);
+  padding-top: 0.35rem;
+  border-top: 4px solid var(--ink);
   font-family: var(--font-display);
-  font-size: 0.95rem;
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
+  font-size: 1.9rem;
+  font-weight: 800;
+  font-style: italic;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
 }
 
-.count {
-  font-family: var(--font-body), Georgia, serif;
-  font-size: 0.72rem;
-  font-weight: 400;
-  letter-spacing: 0.04em;
-  color: var(--muted);
+/* Under the flag, a folio line between rules: how many, and which way they run. */
+.folio {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  min-height: 1.5rem;
+  margin: 0.35rem 0 0;
+  padding: 0.15rem 0;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   font-variant-numeric: lining-nums tabular-nums;
 }
 
+.orders {
+  display: flex;
+  gap: 0.2rem;
+}
+
+.order {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.order + .order::before {
+  content: "|";
+  margin-right: 0.2rem;
+  color: var(--hairline);
+}
+
+.order[aria-pressed="true"] {
+  color: var(--ink);
+}
+
+.order:hover {
+  color: var(--ink);
+}
+
 .compose {
-  padding: 0.7rem 0;
-  border-bottom: 1px solid var(--ink);
+  padding: 0.75rem 0 0.8rem;
+  border-bottom: 3px double var(--ink);
 }
 
 .signIn {
   display: block;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-style: italic;
   text-align: center;
 }
@@ -46,33 +85,47 @@
   text-decoration-thickness: 1px;
 }
 
+/* Ruled like a sheet of writing paper, one rule a line. */
 .field {
   display: block;
   width: 100%;
-  padding: 0.4rem 0.5rem;
-  border: 1px solid var(--hairline);
+  padding: 0 0.1rem;
+  border: 0;
   border-radius: 0;
-  background: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(var(--line) - 1px),
+    var(--hairline) calc(var(--line) - 1px),
+    var(--hairline) var(--line)
+  );
   color: inherit;
   font: inherit;
+  line-height: var(--line);
   resize: vertical;
 }
 
 .field:focus {
-  border-color: var(--ink);
   outline: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(var(--line) - 1px),
+    var(--ink) calc(var(--line) - 1px),
+    var(--ink) var(--line)
+  );
 }
 
 .formEnd {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-top: 0.35rem;
+  margin-top: 0.4rem;
 }
 
 .words,
 .over {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   color: var(--muted);
   font-variant-numeric: lining-nums tabular-nums;
 }
@@ -88,7 +141,6 @@
 }
 
 .post,
-.order,
 .remove {
   padding: 0;
   border: 0;
@@ -101,36 +153,20 @@
 }
 
 .post {
-  font-size: 0.9rem;
-  border-bottom: 1px solid var(--hairline);
+  padding: 0.05rem 0.7rem 0.15rem;
+  border: 1px solid var(--ink);
+  font-size: 0.85rem;
 }
 
 .post:hover:not(:disabled) {
-  border-bottom-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
 }
 
 .post:disabled {
+  border-color: var(--hairline);
   color: var(--muted);
   cursor: default;
-}
-
-.orders {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin: 0;
-  padding: 0.35rem 0;
-  border-bottom: 1px solid var(--hairline);
-}
-
-.order {
-  font-size: 0.8rem;
-  color: var(--muted);
-}
-
-.order[aria-pressed="true"] {
-  color: var(--ink);
-  font-weight: 700;
 }
 
 .comments {
@@ -140,43 +176,23 @@
 }
 
 .comment {
-  padding: 0.65rem 0 0.7rem;
+  padding: 0.85rem 0 0.75rem;
 }
 
-.comment + .comment {
-  border-top: 1px solid var(--hairline);
-}
-
-.byline {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 0 0.6rem;
-  margin: 0 0 0.2rem;
-  font-size: 0.66rem;
-  line-height: 1.3;
-  color: var(--muted);
-  font-variant-numeric: lining-nums;
-}
-
-/* The name keeps the case its writer gave it. */
-.author {
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: var(--ink);
-}
-
-.author:hover {
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.15em;
+/* Between letters, a short centred rule, as a letters page sets them. */
+.comment + .comment::before {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  margin: -0.85rem auto 0.85rem;
+  border-top: 1px solid var(--ink);
 }
 
 .text {
   text-align: justify;
   hyphens: auto;
   -webkit-hyphens: auto;
+  hanging-punctuation: first;
   overflow-wrap: anywhere;
   color: var(--ink-soft);
 }
@@ -190,9 +206,51 @@
   text-indent: 0;
 }
 
+/* The first words of a letter, run in in small caps. */
+.lede {
+  font-variant: all-small-caps;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+}
+
+/* Signed at the foot, set to the right: the name, then when. */
+.signoff {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: baseline;
+  gap: 0 0.5rem;
+  margin: 0.3rem 0 0;
+  font-size: 0.68rem;
+  line-height: 1.3;
+  font-style: italic;
+  color: var(--muted);
+  font-variant-numeric: lining-nums;
+}
+
+/* The name keeps the case its writer gave it. */
+.author {
+  font-size: 0.8rem;
+  font-style: normal;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.author::before {
+  content: "— ";
+  font-weight: 400;
+}
+
+.author:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
 .remove {
-  margin-top: 0.2rem;
   font-size: 0.72rem;
+  font-style: normal;
   color: var(--muted);
 }
 
@@ -209,5 +267,9 @@
   .column {
     font-size: 0.95rem;
     line-height: 1.45;
+  }
+
+  .field {
+    --line: 1.45em;
   }
 }
