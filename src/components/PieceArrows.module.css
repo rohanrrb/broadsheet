@@ -47,20 +47,3 @@
     right: 0.8rem;
   }
 }
-
-/* Beside the columns either side of a piece, the arrows shrink to fit the page's own margin, clear of the columns. */
-@media (min-width: 64rem) and (max-width: 99rem) {
-  .arrow {
-    width: 1.7rem;
-    height: 1.7rem;
-    font-size: 0.95rem;
-  }
-
-  .left {
-    left: 0.15rem;
-  }
-
-  .right {
-    right: 0.15rem;
-  }
-}
