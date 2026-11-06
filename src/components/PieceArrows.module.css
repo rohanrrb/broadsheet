@@ -25,8 +25,8 @@
   right: 1rem;
 }
 
-/* Where the text runs nearly edge to edge, the arrows drop to the bottom corners, on paper. */
-@media (max-width: 53rem) {
+/* Where the page's columns run nearly edge to edge, the arrows drop to the bottom corners, on paper. */
+@media (max-width: 99rem) {
   .arrow {
     top: auto;
     bottom: 0.8rem;

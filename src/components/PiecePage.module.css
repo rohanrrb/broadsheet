@@ -46,3 +46,47 @@
   font-weight: 700;
   line-height: 0.82;
 }
+
+/*
+ * The piece, and the column of comments beside it. Where there is room the
+ * column runs alongside, ruled off, and stays in view as the piece scrolls,
+ * scrolling on its own; otherwise it follows the piece.
+ */
+.spread {
+  display: grid;
+  grid-template-columns: minmax(0, 40rem);
+  justify-content: center;
+}
+
+.side {
+  padding: 0 0 4rem;
+  border-top: 1px solid var(--ink);
+}
+
+.sideInner {
+  padding-top: 1.5rem;
+}
+
+@media (min-width: 64rem) {
+  .spread {
+    grid-template-columns: minmax(0, 40rem) minmax(17rem, 21rem);
+    column-gap: 2.5rem;
+  }
+
+  .side {
+    padding: 0 0 0 1.25rem;
+    border-top: 0;
+    border-left: 1px solid var(--hairline);
+  }
+
+  .sideInner {
+    position: sticky;
+    top: 0;
+    max-height: 100vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--hairline) transparent;
+    padding: 2.5rem 0.25rem 2rem 0;
+  }
+}
