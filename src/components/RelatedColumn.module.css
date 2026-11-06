@@ -1,0 +1,104 @@
+/* A column of stories cut short, set like the front page's: small justified body type between hairlines. */
+.column {
+  font-size: var(--body-size);
+  line-height: var(--line);
+}
+
+.title {
+  margin: 0;
+  padding-bottom: 0.3rem;
+  border-bottom: 3px double var(--ink);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* A click anywhere on the box opens the story: see TileClicks. */
+.story {
+  padding: 0.75rem 0 0.8rem;
+  cursor: pointer;
+}
+
+.story + .story {
+  border-top: 1px solid var(--hairline);
+}
+
+.kicker {
+  margin: 0 0 0.25rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.headline {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+
+.story:hover .headline a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.12em;
+}
+
+.byline {
+  margin: 0 0 0.3rem;
+  font-size: 0.62rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* The name keeps the case its writer gave it. */
+.byline .author {
+  font-size: 0.7rem;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+
+a.author:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+}
+
+/* The opening of the text, cut off after a few lines as a box on the front page would cut it. */
+.excerpt {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  color: var(--ink-soft);
+}
+
+.jump {
+  margin: 0.15rem 0 0;
+  font-size: 0.7rem;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.jump a:hover {
+  text-decoration: underline;
+}

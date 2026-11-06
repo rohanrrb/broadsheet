@@ -48,19 +48,31 @@
 }
 
 /*
- * The piece, and the column of comments beside it. Where there is room the
+ * The piece, the column of comments beside it, and on the widest screens a
+ * column of pieces to read next on its other side. Where there is room a
  * column runs alongside, ruled off, and stays in view as the piece scrolls,
- * scrolling on its own; otherwise it follows the piece.
+ * scrolling on its own; otherwise the comments follow the piece.
  */
 .spread {
   display: grid;
   grid-template-columns: minmax(0, 40rem);
+  grid-template-areas: "piece" "talk";
   justify-content: center;
 }
 
+.article {
+  grid-area: piece;
+}
+
 .side {
+  grid-area: talk;
   padding: 0 0 4rem;
   border-top: 1px solid var(--ink);
+}
+
+.more {
+  display: none;
+  grid-area: more;
 }
 
 .sideInner {
@@ -70,6 +82,7 @@
 @media (min-width: 64rem) {
   .spread {
     grid-template-columns: minmax(0, 40rem) minmax(17rem, 21rem);
+    grid-template-areas: "piece talk";
     column-gap: 2.5rem;
   }
 
@@ -88,5 +101,19 @@
     scrollbar-width: thin;
     scrollbar-color: var(--hairline) transparent;
     padding: 2.5rem 0.25rem 2rem 0;
+  }
+}
+
+@media (min-width: 80rem) {
+  .spread {
+    grid-template-columns: minmax(13rem, 15rem) minmax(0, 40rem) minmax(17rem, 21rem);
+    grid-template-areas: "more piece talk";
+    justify-content: space-between;
+  }
+
+  .more {
+    display: block;
+    padding: 0 1.25rem 0 0;
+    border-right: 1px solid var(--hairline);
   }
 }
