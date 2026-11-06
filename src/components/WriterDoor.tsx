@@ -18,13 +18,13 @@ import styles from "./WriterDoor.module.css";
 type Arrival = { identity: Identity; isNew: boolean };
 
 /**
- * The way to a writer's own page. The pen name this browser remembers is
- * checked with the paper and, if it holds, followed to its page. Otherwise
- * the writer signs in with a name and key, or takes a new name and is handed
- * its key. There is still no account: signing in only makes this browser
- * remember.
+ * The way to a writer's own page, or back to `then`. The pen name this
+ * browser remembers is checked with the paper and, if it holds, followed
+ * there. Otherwise the writer signs in with a name and key, or takes a new
+ * name and is handed its key. There is still no account: signing in only
+ * makes this browser remember.
  */
-export function WriterDoor() {
+export function WriterDoor({ then }: { then?: string }) {
   const router = useRouter();
   const remembered = useIdentity();
   const hydrated = useHydrated();
@@ -40,22 +40,22 @@ export function WriterDoor() {
     let left = false;
     verifyWriter(remembered.name, remembered.key).then((reply) => {
       if (left) return;
-      if (reply.ok) router.replace(writerHref(reply.identity.name));
+      if (reply.ok) router.replace(then ?? writerHref(reply.identity.name));
       else if (reply.refused) setRefused(remembered);
       else setTrouble(reply.error);
     });
     return () => {
       left = true;
     };
-  }, [checking, remembered, router]);
+  }, [checking, remembered, router, then]);
 
   const arrive = (identity: Identity, isNew: boolean) => {
     setArrival({ identity, isNew });
     rememberIdentity(identity);
-    if (!isNew) router.replace(writerHref(identity.name));
+    if (!isNew) router.replace(then ?? writerHref(identity.name));
   };
 
-  if (arrival?.isNew) return <Welcome identity={arrival.identity} />;
+  if (arrival?.isNew) return <Welcome identity={arrival.identity} then={then} />;
   if (!hydrated || checking || arrival) return null;
   if (trouble) {
     return (
@@ -186,8 +186,8 @@ function Submit(props: { label: string; busy: boolean; disabled: boolean; error:
   );
 }
 
-/** A new writer's one look at their key, before they go anywhere else. */
-function Welcome({ identity }: { identity: Identity }) {
+/** A new writer's one look at their key, before they go anywhere else: on to write, or back to `then`. */
+function Welcome({ identity, then }: { identity: Identity; then?: string }) {
   return (
     <>
       <h1 className={note.title}>You are now {identity.name}</h1>
@@ -195,9 +195,7 @@ function Welcome({ identity }: { identity: Identity }) {
         Keep this credential safe and secret. <strong>Credentials cannot be recovered.</strong>
       </p>
       <KeyCard identity={identity} />
-      <p>
-        <Link href="/write">Write your first piece</Link>
-      </p>
+      <p>{then ? <Link href={then}>Go back</Link> : <Link href="/write">Write your first piece</Link>}</p>
     </>
   );
 }
