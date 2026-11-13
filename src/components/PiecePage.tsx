@@ -71,7 +71,7 @@ export async function PiecePage({ writing, place }: { writing: Writing; place?: 
           <div className={styles.sideInner}>
             <CommentColumn
               writingId={writing.id}
-              first={readComments(db, writing.id, {}, timeZone)}
+              first={readComments(db, writing, {}, timeZone)}
               count={countComments(db, writing.id)}
               editor={await isEditor()}
               here={pieceHref(writing)}

@@ -59,6 +59,13 @@ const SAMPLE_COMMENTS = [
   "The headline undersells it.",
   "I have walked that route every day for eleven years and never once noticed what you describe. Tomorrow I will look.",
 ];
+/** Replies set under some of those comments: from the piece's writer, and from readers answering them. */
+const SAMPLE_REPLIES = [
+  "Thank you. The second part is coming, and it goes further into exactly that.",
+  "Fair. I cut a paragraph on it for length and regret it now.",
+  "Seconded.",
+  "I think you are both right, which is the annoying part.",
+];
 const COMMENTS_ON_NEWEST = 75;
 const COMMENTS_ON_OTHERS = [6, 2];
 
@@ -108,15 +115,30 @@ function postNotices(db: InstanceDb, board: number | null, texts: string[]): voi
   });
 }
 
-/** `count` sample comments on a piece, by the sample writers in turn, a few minutes apart since it was published. */
+/**
+ * `count` sample comments on a piece, by the sample writers in turn, a few
+ * minutes apart since it was published. Every third has a thread under it:
+ * the piece's writer answers, and readers answer them.
+ */
 function postComments(db: InstanceDb, piece: Writing, writers: [string, number][], count: number): void {
   const others = writers.filter(([name]) => name !== piece.author);
   const span = Math.max(Date.now() - piece.createdAt.getTime(), 1);
+  const at = (step: number) => new Date(piece.createdAt.getTime() + (span * step) / (count + 2));
   for (let i = 0; i < count; i++) {
     const [author, writerId] = others[(i * 5) % others.length];
     const text = SAMPLE_COMMENTS[(i * 3) % SAMPLE_COMMENTS.length];
-    const at = new Date(piece.createdAt.getTime() + (span * (i + 1)) / (count + 1));
-    postComment(db, { writingId: piece.id, writerId, author, text }, at);
+    const comment = postComment(db, { writingId: piece.id, writerId, author, text }, at(i + 1));
+    if (!comment || i % 3 !== 0 || piece.writerId === null) continue;
+    const answer = postComment(
+      db,
+      { writingId: piece.id, writerId: piece.writerId, author: piece.author, text: SAMPLE_REPLIES[i % 2], parentId: comment.id },
+      at(i + 1.3),
+    );
+    const [readerName, readerId] = others[(i * 7 + 1) % others.length];
+    if (answer && i % 2 === 0) {
+      const reply = { writingId: piece.id, writerId: readerId, author: readerName, parentId: answer.id };
+      postComment(db, { ...reply, text: SAMPLE_REPLIES[2 + (i % 4 === 0 ? 0 : 1)] }, at(i + 1.6));
+    }
   }
 }
 

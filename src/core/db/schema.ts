@@ -1,5 +1,15 @@
 import { sql } from "drizzle-orm";
-import { blob, check, index, integer, real, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
+import {
+  blob,
+  check,
+  index,
+  integer,
+  real,
+  sqliteTable,
+  text,
+  uniqueIndex,
+  type AnySQLiteColumn,
+} from "drizzle-orm/sqlite-core";
 
 /** Minimal shape of a Tiptap (ProseMirror) JSON document. */
 export type TiptapDoc = {
@@ -159,7 +169,9 @@ export const images = sqliteTable(
 
 /**
  * What readers say about a piece: plain text under a pen name, set in the
- * column beside it. A comment goes with its piece and with its writer.
+ * column beside it. A comment goes with its piece and with its writer. A
+ * reply names the comment it answers and the thread's first comment; a
+ * comment taken down while it has replies keeps its place with no text.
  */
 export const comments = sqliteTable(
   "comments",
@@ -173,8 +185,13 @@ export const comments = sqliteTable(
       .references(() => writers.id, { onDelete: "cascade" }),
     /** The name as printed, fixed when the comment was posted. */
     author: text("author").notNull(),
+    /** Empty once taken down while it still had replies. */
     text: text("text").notNull(),
     createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
+    /** The comment this one answers; null for one on the piece itself. */
+    parentId: integer("parent_id").references((): AnySQLiteColumn => comments.id, { onDelete: "cascade" }),
+    /** The first comment of the thread a reply is in; null for that first comment. */
+    threadId: integer("thread_id"),
   },
-  (t) => [index("comments_writing_idx").on(t.writingId)],
+  (t) => [index("comments_writing_idx").on(t.writingId), index("comments_thread_idx").on(t.threadId)],
 );

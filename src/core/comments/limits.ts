@@ -4,6 +4,8 @@ export const MAX_COMMENT_WORDS = 300;
 export const MAX_COMMENT_LENGTH = 3000;
 /** How many comments are sent at a time, as the column is scrolled. */
 export const COMMENTS_PER_PAGE = 30;
+/** The most replies one thread sends when it is opened. */
+export const MAX_THREAD = 500;
 
 /**
  * A comment as it is kept: paragraphs split by one blank line, single spaces

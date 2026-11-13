@@ -89,7 +89,8 @@
 
 .post,
 .order,
-.remove {
+.action,
+.toggle {
   padding: 0;
   border: 0;
   background: none;
@@ -147,6 +148,31 @@
   border-top: 1px solid var(--hairline);
 }
 
+/* Replies hang under what they answer, ruled off at the left, each step a little further in. */
+.replies {
+  margin: 0.35rem 0 0;
+  padding: 0 0 0 0.7rem;
+  border-left: 1px solid var(--hairline);
+  list-style: none;
+}
+
+/* Deep in a thread, replies stop stepping in: the column is narrow. */
+.flat {
+  margin-left: -0.7rem;
+  padding-left: 0.7rem;
+}
+
+.reply {
+  padding: 0.45rem 0 0.1rem;
+}
+
+.removed {
+  margin: 0;
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--muted);
+}
+
 .byline {
   display: flex;
   flex-wrap: wrap;
@@ -158,6 +184,28 @@
   line-height: 1.3;
   color: var(--muted);
   font-variant-numeric: lining-nums;
+}
+
+.who {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+/* The piece's own writer, answering under their piece. */
+.writer,
+.writerReplied {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.writer {
+  padding: 0 0.25rem;
+  border: 1px solid var(--accent);
+  line-height: 1.4;
 }
 
 /* The name keeps the case its writer gave it. */
@@ -190,14 +238,50 @@
   text-indent: 0;
 }
 
-.remove {
-  margin-top: 0.2rem;
-  font-size: 0.72rem;
+/* Under a comment: its folded replies, then Reply and Remove. */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.9rem;
+  margin: 0.2rem 0 0;
+}
+
+.actions:empty {
+  display: none;
+}
+
+.action,
+.toggle {
+  font-size: 0.74rem;
   color: var(--muted);
 }
 
-.remove:hover {
+.action:hover,
+.toggle:hover {
   color: var(--ink);
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.caret {
+  font-variant: normal;
+  font-size: 0.6rem;
+}
+
+.writerReplied {
+  margin-left: 0.2rem;
+  font-weight: 700;
+}
+
+.answer {
+  margin: 0.4rem 0 0.2rem;
 }
 
 /* Where the next page is fetched from, as it comes near. */
