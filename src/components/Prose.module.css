@@ -71,12 +71,22 @@
 
 .prose figure {
   margin: 0 0 1.8rem;
+  /* The photo measures its height against the figure's width: see `.prose img`. */
+  container-type: inline-size;
 }
 
+/*
+ * A photo runs the width of the text and is never taller than 4:3: a square
+ * or upright one is cropped to that, from the middle, as a paper crops a
+ * photo to its slot; a wider one is set whole. Outside a figure (in the
+ * editor) the cap is the 4:3 of a full 40rem column.
+ */
 .prose img {
   display: block;
   width: 100%;
   height: auto;
+  max-height: min(30rem, 75cqi);
+  object-fit: cover;
 }
 
 .prose figcaption {
